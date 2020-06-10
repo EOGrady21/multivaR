@@ -18,3 +18,5 @@ Suggests:
     rmarkdown,
     testthat
 VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.0.2

@@ -3,12 +3,21 @@
 # query azmp data
 
 query <- function(search_key, location = 'title'){
+  #' Query azmpdata Data products
+  #'
+  #' Search for matches to search term(s) within azmpdata package data objects
+  #'
   #' @param search_key Keyword(s) to search for in azmpdata, if using multiple keywords, provide vector of character strings
   #' @param location Where to search for keyword(s), options are 'title', or 'metadata'
   #' @param logic character string specifying search logic, options are 'AND' to search for matches to ALL search_key terms, or 'OR' to search for matches to any search_key terms
   #'
   #'
-  #'  eg. query(search_key = c('mean', 'chlorophyll'), location = 'metadata')
+  #' @examples
+  #' /dontrun{
+  #' query(search_key = c('mean', 'chlorophyll'), location = 'metadata')
+  #' }
+  #'
+  #' @export
 
   search_locs <- c('title', 'metadata')
   if(!location %in% search_locs){
