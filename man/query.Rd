@@ -16,9 +16,13 @@ query(search_key, location = "title")
 \description{
 Search for matches to search term(s) within azmpdata package data objects
 }
+\note{
+Leave search_key blank \code{''} to return all available datasets
+}
 \examples{
 /dontrun{
 query(search_key = c('mean', 'chlorophyll'), location = 'metadata')
 }
+
 
 }
