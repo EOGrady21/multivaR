@@ -11,11 +11,12 @@ query <- function(search_key, location = 'title'){
   #' @param location Where to search for keyword(s), options are 'title', or 'metadata'
   #' @param logic character string specifying search logic, options are 'AND' to search for matches to ALL search_key terms, or 'OR' to search for matches to any search_key terms
   #'
-  #'
+  #' @note Leave search_key blank `''` to return all available datasets
   #' @examples
   #' /dontrun{
   #' query(search_key = c('mean', 'chlorophyll'), location = 'metadata')
   #' }
+  #'
   #'
   #' @export
 

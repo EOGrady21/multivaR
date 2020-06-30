@@ -1,0 +1,48 @@
+---
+title: "draft"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{draft}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(multivaR)
+library(dplyr)
+```
+
+
+This is a rough draft vignette of how to run a typical workflow using multivaR
+
+
+Step one is to assemble all the data for different variables into a single dataframe
+
+```{r}
+
+# step 1: assemble data
+
+# search for azmpdata
+library(azmpdata)
+query(search_key = '')
+
+# load in desired data frames
+data("nitrate_inventory_timeseries_hl2")
+data("chlorophyll_inventory_timeseries_hl2")
+
+# collate data frames
+
+datfr <- right_join(chlorophyll_inventory_timeseries_hl2, nitrate_inventory_timeseries_hl2)
+
+```
+
+
+Once data is assembled, PCA can be run
+
