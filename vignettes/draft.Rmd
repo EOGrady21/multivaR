@@ -46,3 +46,12 @@ datfr <- right_join(chlorophyll_inventory_timeseries_hl2, nitrate_inventory_time
 
 Once data is assembled, PCA can be run
 
+
+```{r}
+PCA(datfr)
+
+```
+
+
+
+
