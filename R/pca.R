@@ -12,7 +12,7 @@
 PCA <- function(data){
 
   # convert to datatable if necessary
-  if(is.data.frame(data)){
+  if(!is.data.table(data)){
     data <- as.data.table(data)
   }
 
