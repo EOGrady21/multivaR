@@ -20,13 +20,19 @@ query <- function(search_key, location = 'title'){
   #'
   #' @export
 
+  # confirm search location
   search_locs <- c('title', 'metadata')
   if(!location %in% search_locs){
     stop('Invalid location argument!')
   }
+
+  # check for azmpdata
+  if('azmpdata' %in% rownames(installed.packages()) == FALSE){
+    stop('Please install azmpdata package before attempting to query!')
+  }
   rda_list <- utils::data(package="azmpdata")
 
-# search titles
+  # search titles
   if(location == 'title'){
     titles <- rda_list$results[,3]
 
