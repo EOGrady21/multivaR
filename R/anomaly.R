@@ -21,21 +21,51 @@
 #'
 
 monthlyAnomaly <- function(d, climatologyYears, var, normalizedAnomaly = TRUE){
-  mm <- monthlyClimatology(d, climatologyYears)
+  mm <- monthlyClimatology(d, climatologyYears, var = var)
   months <- 1:12
   mok <- lapply(months, function(k) which(d$month == k))
   anomaly <- vector(length = length(d$year))
-  for (i in 1:length(months)){
-    anomaly[mok[[i]]] <- d[[var]][mok[[i]]] - mm[[var]][i]
+  for (i in mm$month){ # edited to only loop through months existing in mm
+    anomaly[mok[[i]]] <- d[[var]][mok[[i]]] - mm[[var]][mm$month == i] # edited to pull exact month and not assume mm includes months 1-12
   }
   if(!normalizedAnomaly) {
-    cbind(d, anomaly = anomaly)
+    dd <- cbind(d, anomaly = anomaly)
   } else {
-    cbind(monthlyNormalizedAnomaly(d, climatologyYears, var), anomaly = anomaly)
+    dd <- cbind(monthlyNormalizedAnomaly(d, climatologyYears, var), anomaly = anomaly)
   }
+ # rename anomaly vars to reflect which variable they were created from
+  newname <- paste0(var, '_anomaly')
+  eval(parse(text = paste('dd <- dplyr::rename(dd, ',newname,' = anomaly)')))
 
+  normnewname <- paste0(var, '_normalizedAnomaly')
+  eval(parse(text = paste('dd <- dplyr::rename(dd, ',normnewname,' = normalizedAnomaly)')))
+
+  return(dd)
 }
 
+#' @title Calculate monthly climatology
+#'
+#' @description This function calculates the monthly climatology
+#'
+#' @param d a data.frame containing at least a column named month and one other variable
+#' @param climatologyYears a vector of length two indicating the range of years
+#' to calculate the climatology
+#'  @param var name of variable of which anomaly should be calculated (present in `d``)
+#'
+#' @return the results of aggregate
+#'
+#' @author Chantelle Layton, Emily Chisholm
+#'
+#' @importFrom stats aggregate
+#'
+#' @export
+
+monthlyClimatology <- function(d, climatologyYears, var){
+  okclim <- d$year >= climatologyYears[1] & d$year <= climatologyYears[2]
+  dd <- d[okclim, ]
+  eval(parse(text = paste('mm <- aggregate(',var,' ~ month, dd, mean, na.rm = TRUE)')))
+  mm
+}
 
 #' @title Caclulate monthly normalized anomaly values
 #'
@@ -59,13 +89,13 @@ monthlyAnomaly <- function(d, climatologyYears, var, normalizedAnomaly = TRUE){
 #'
 
 monthlyNormalizedAnomaly <- function(d, climatologyYears, var){
-  mm <- monthlyClimatology(d, climatologyYears)
-  msd <- monthlyStandardDeviation(d, climatologyYears)
+  mm <- monthlyClimatology(d, climatologyYears, var = var)
+  msd <- monthlyStandardDeviation(d, climatologyYears, var = var)
   months <- 1:12
   mok <- lapply(months, function(k) which(d$month == k))
   anomaly <- vector(length = length(d$year))
-  for (i in 1:length(months)){
-    anomaly[mok[[i]]] <- (d[[var]][mok[[i]]] - mm[[var]][i]) / msd[[var]][i]
+  for (i in mm$month){ # edit to only loop through existing months
+    anomaly[mok[[i]]] <- (d[[var]][mok[[i]]] - mm[[var]][mm$month == i]) / msd[[var]][mm$month == i]
   }
   cbind(d, normalizedAnomaly = anomaly)
 }
@@ -116,5 +146,32 @@ annualNormalizedAnomaly <- function(d, climatologyYears){
   cbind(d, normalizedAnomaly = normanom)
 }
 
+
+#' @title Calculate monthly climatology standard deviation
+#'
+#' @description This function calculates the monthly climatology standard deviation.
+#'
+#' @param d a data.frame containing at least a column named month and one other variable
+#' @param climatologyYears a vector of length two indicating the range of years
+#'  @param var name of variable of which anomaly should be calculated (present in `d``)
+#'
+#' @return the results of the aggregate function, a data.frame with columns `month` and `temperature`
+#'
+#' @details Monthly climatology standard deviation is calculated by taking the values within the
+#' defined climatology range and finding the standard deviation for each month.
+#'
+#' @author Chantelle Layton & Emily Chisholm
+#'
+#' @importFrom stats sd
+#' @importFrom stats aggregate
+#'
+#' @export
+
+monthlyStandardDeviation <- function(d, climatologyYears, var){
+  okclim <- d$year >= climatologyYears[1] & d$year <= climatologyYears[2]
+  dd <- d[okclim, ]
+  eval(parse(text = paste('mm <- aggregate(',var,' ~ month, dd, sd, na.rm = TRUE)')))
+  mm
+}
 
 
