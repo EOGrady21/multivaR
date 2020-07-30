@@ -1,6 +1,16 @@
 # anomaly calculations
 # from Chantelle Layton and Benoit Casault
 
+
+# TODO WARNING if cruise spans over 2 months say september 20th - October 3rd,
+# this script will calculate two monthly anomalies but it would be best for AZMP
+# practices if only one monthly anomaly was calculated. workaround needs to be
+# constructed for user to manually override groupings of data by month, could be
+# by providing mission name and grouping by mission?
+# mission info is currently included in event_id but that may change, check with Benoit
+
+
+
 #' @title Caclulate monthly anomaly values
 #'
 #' @description This function calculates the monthly anomaly.
@@ -107,6 +117,7 @@ monthlyNormalizedAnomaly <- function(d, climatologyYears, var){
 #' monthly anomaly values.
 #'
 #' @param d a data.frame containing year, month, and at least anomaly, and optionally normalizedAnomaly
+#' @param anomaly a character string naming the column of monthly anomaly which should be aggregated into annual anomaly
 #'
 #' @return a data.frame with year, anomaly, and optionally normalizedAnomaly
 #'
@@ -116,9 +127,9 @@ monthlyNormalizedAnomaly <- function(d, climatologyYears, var){
 #'
 #' @export
 
-annualAnomaly <- function(d){
-  aa <- aggregate(anomaly ~ year, d, mean, na.rm = TRUE)
-  aa
+annualAnomaly <- function(d, anomaly){
+  eval(parse(text = paste('aa <- aggregate(', anomaly,' ~ year, d, mean, na.rm = TRUE)')))
+  return(aa)
 }
 
 #' @title Calculate normalized annual anomaly values

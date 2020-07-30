@@ -1,0 +1,69 @@
+---
+title: "Anomaly Example"
+output: html_notebook
+---
+
+Load libraries.
+
+```{r}
+library(stringr)
+library(dplyr)
+library(azmpdata)
+library(multivaR)
+
+```
+
+
+Get test data files from Benoit. Once azmpdata is finished this section will be replaced by a query to azmpdata.
+
+```{r}
+
+# test files
+fp <- 'C:/Users/chisholme/desktop/April2020- March2021/Data Access/draft_csv/'
+list_fn <- list.files(fp)
+
+# load in csv
+
+for (i in 1:length(list_fn)){
+  # isolate df name
+
+  dfname <- substr(list_fn[i], 1, nchar(list_fn[i])- 4)
+
+  eval(parse(text = paste(dfname, '<- read.csv(file.path(fp, list_fn[i]))')))
+
+}
+
+head(Derived_Occupations_Sections)
+
+```
+
+Calculate monthly and annual anomalies.
+
+```{r}
+
+# test anomaly calcs
+
+dd <- monthlyAnomaly(d = Derived_Occupations_Sections, climatologyYears = c(1999, 2010), var = 'integrated_chlorophyll_0_100')
+
+dd <- monthlyAnomaly(d = dd, climatologyYears = c(1999, 2010), var = 'integrated_nitrate_0_50')
+
+# test annual results
+
+ddann <- annualAnomaly(d = dd, anomaly = 'integrated_chlorophyll_0_100_anomaly')
+
+
+```
+
+Improvements to anomaly functions:
+
+* account for possibilty of data collection stretching between two months, and wanting one anomaly value (from one cruise)
+  * once cruise_id is incorporated into metadata an option will be written into the function to group data by cruise rather than month
+  
+* Ability to split data by section or station within data frame
+  * Benoit's scripts split data by section or station before calculating anomalies
+  
+
+
+
+
+
