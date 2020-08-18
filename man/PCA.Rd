@@ -2,7 +2,10 @@
 % Please edit documentation in R/pca.R
 \name{PCA}
 \alias{PCA}
-\title{Principal component analysis for given set of variables}
+\title{Principal component analysis for given set of variables
+Performs a principal components analysis using the stats package, on all
+variables provided in \code{data} with the exception of \code{year}. Converts to
+data.table and removes duplicate or incomplete rows before processing.}
 \usage{
 PCA(data)
 }
@@ -14,4 +17,10 @@ PCA(data)
 }
 \description{
 Principal component analysis for given set of variables
+Performs a principal components analysis using the stats package, on all
+variables provided in \code{data} with the exception of \code{year}. Converts to
+data.table and removes duplicate or incomplete rows before processing.
+}
+\author{
+Daniel Reed, Emily Chisholm
 }

@@ -24,7 +24,7 @@
 #'
 #' @return a data.frame containing columns `year`, `month`, `anomaly`, and `normalizedAnomaly`
 #' if desired.
-#'
+#' @family anomaly
 #' @author Chantelle Layton, Emily Chisholm
 #'
 #' @export
@@ -65,7 +65,7 @@ monthlyAnomaly <- function(d, climatologyYears, var, normalizedAnomaly = TRUE){
 #' @return the results of aggregate
 #'
 #' @author Chantelle Layton, Emily Chisholm
-#'
+#' @family anomaly
 #' @importFrom stats aggregate
 #'
 #' @export
@@ -92,7 +92,7 @@ monthlyClimatology <- function(d, climatologyYears, var){
 #' monthly and standard deviation. The normalized anomaly values are calculated
 #' by subtracting the monthly climatology value from the monthly value, and the dividing it
 #' by the monthly climatology standard deviation.
-#'
+#' @family anomaly
 #' @author Chantelle Layton, Emily Chisholm
 #'
 #' @export
@@ -117,17 +117,21 @@ monthlyNormalizedAnomaly <- function(d, climatologyYears, var){
 #' monthly anomaly values.
 #'
 #' @param d a data.frame containing year, month, and at least anomaly, and optionally normalizedAnomaly
-#' @param anomaly a character string naming the column of monthly anomaly which should be aggregated into annual anomaly
+#' @param anomaly a character string naming the column of __monthly anomaly__ which should be aggregated into annual anomaly
 #'
 #' @return a data.frame with year, anomaly, and optionally normalizedAnomaly
 #'
-#' @author Chantelle Layton
-#'
+#' @author Chantelle Layton, Emily Chisholm
+#' @family anomaly
 #' @importFrom stats aggregate
 #'
 #' @export
 
 annualAnomaly <- function(d, anomaly){
+  anomcheck <- grep(anomaly, pattern = 'anomaly')
+  if(length(anomcheck) == 0){
+    warning(paste('Are you sure ', anomaly, 'is a monthly anomaly column?'))
+  }
   eval(parse(text = paste('aa <- aggregate(', anomaly,' ~ year, d, mean, na.rm = TRUE)')))
   return(aa)
 }
@@ -142,7 +146,7 @@ annualAnomaly <- function(d, anomaly){
 #' to calculate the climatology.
 #'
 #' @return a data.frame with year, normalizedAnomaly, and other columns in d
-#'
+#' @family anomaly
 #' @author Chantelle Layton
 #'
 #' @importFrom stats aggregate
@@ -170,7 +174,7 @@ annualNormalizedAnomaly <- function(d, climatologyYears){
 #'
 #' @details Monthly climatology standard deviation is calculated by taking the values within the
 #' defined climatology range and finding the standard deviation for each month.
-#'
+#' @family anomaly
 #' @author Chantelle Layton & Emily Chisholm
 #'
 #' @importFrom stats sd

@@ -1,10 +1,40 @@
 context('Anomaly calculations')
 
 # write real test with csv available in azmpdata
+library(multivaR)
 
-# test format
+# create minimal data example
+data <- data.frame(year = seq(1999, 2015), month = sample.int(12, 17 , replace = TRUE), ice_volume = runif(17), ice_day = runif(17), temperature = runif(17), salinity = runif(17))
 
-# test calculation of anaomalies
+# test 1
+
+test_that('monthly anomalies'{
+  expect_silent(dd <- monthlyAnomaly(d = data, climatologyYears = c(1999, 2010), var = 'salinity'))
+  expect_true(is.data.frame(dd))
+  expect_equal(length(data) +2, length(dd))
+  expect_false(anyNA(dd$salinity_anomaly))
+
+})
+
+# test 2
+test_that('multiple anomalies can be calculated'{
+  expect_silent(dd <- monthlyAnomaly(d = data, climatologyYears = c(1999, 2010), var = 'salinity'))
+  expect_silent(dd <- monthlyAnomaly(d = dd, climatologyYears = c(1999, 2010), var = 'temperature'))
+  expect_true(is.data.frame(dd))
+  expect_equal(length(data) +4, length(dd))
+  expect_false(anyNA(dd$temperature_anomaly))
+})
+
+# test 3
+test_that('annual anomalies'{
+  expect_silent(dd <- monthlyAnomaly(d = data, climatologyYears = c(1999, 2010), var = 'salinity'))
+  expect_silent(ddann <- annualAnomaly(d = dd, anomaly = 'salinity_anomaly'))
+  # warning about non anomaly var
+  expect_warning(ddann <- annualAnomaly(d = dd, anomaly = 'salinity'))
+})
+
+
+# test calculation of anomalies
 
 # test normalization
 
@@ -51,6 +81,7 @@ ddann <- annualAnomaly(d = dd, anomaly = 'integrated_chlorophyll_0_100_anomaly')
 
 
 # NOTE: Benoit's version calculates a very different result than Chantelle's, I suspect the implementation of Benoit's code is incorrectly implemented
+# difference between using a monthly climatology and annual climatology
 
 
 # Benoit's version -----------------------
@@ -63,7 +94,7 @@ df_data_filtered_l <- df_data_filtered_l %>%
 ## annual climatology
 df_climatology_annual_l <- df_data_filtered_l %>%
   dplyr::filter(., year>=1999, year<=2010) %>%
-  dplyr::group_by(., section, year) %>%
+  dplyr::group_by(.,  year) %>% # removed group by section
   dplyr::summarise(., mean=mean(integrated_chlorophyll_0_100, na.rm=TRUE), sd=sd(integrated_chlorophyll_0_100, na.rm=TRUE)) %>%
   dplyr::ungroup(.)
 
@@ -73,7 +104,7 @@ df_climatology_annual_l <- df_data_filtered_l %>%
 ## annual anomalies
 df_anomaly_annual_l <- dplyr::left_join(df_data_filtered_l,
                           df_climatology_annual_l ,
-                          by=c("section", "year")) %>%
+                          by=c( "year")) %>% # removed section
   dplyr::group_by(., year) %>%
   dplyr::mutate(., value=(integrated_chlorophyll_0_100-mean)/sd) %>%
   summarise(., annual_anomaly = mean(value, na.rm = TRUE)) %>%

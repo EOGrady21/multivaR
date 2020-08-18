@@ -10,7 +10,9 @@ library(stringr)
 library(dplyr)
 library(azmpdata)
 library(multivaR)
-
+#source('anomaly.R')
+library(ggplot2)
+library(gridExtra, warn.conflicts = FALSE)
 ```
 
 
@@ -19,16 +21,19 @@ Get test data files from Benoit. Once azmpdata is finished this section will be 
 ```{r}
 
 # test files
-fp <- 'C:/Users/chisholme/desktop/April2020- March2021/Data Access/draft_csv/'
-list_fn <- list.files(fp)
+ fp <- 'C:/Users/chisholme/desktop/April2020- March2021/Data Access/draft_csv/'
+ list_fn <- list.files(fp)
+
+ # list_fn <- 'Discrete_Occupations_Sections.csv'
+
 
 # load in csv
 
 for (i in 1:length(list_fn)){
   # isolate df name
 
-  dfname <- substr(list_fn[i], 1, nchar(list_fn[i])- 4)
-
+  dfname <- gsub('(\\w+)\\.csv', '\\1', list_fn[i]) # thanks CL for the reg expression!
+    #dfname <- 'Derived_Occupations_Sections'
   eval(parse(text = paste(dfname, '<- read.csv(file.path(fp, list_fn[i]))')))
 
 }
@@ -37,7 +42,7 @@ head(Derived_Occupations_Sections)
 
 ```
 
-Calculate monthly and annual anomalies.
+Calculate monthly and annual anomalies.Modified versions of Chantelle's functions.
 
 ```{r}
 
@@ -51,19 +56,71 @@ dd <- monthlyAnomaly(d = dd, climatologyYears = c(1999, 2010), var = 'integrated
 
 ddann <- annualAnomaly(d = dd, anomaly = 'integrated_chlorophyll_0_100_anomaly')
 
-
+head(ddann)
 ```
 
 Improvements to anomaly functions:
 
-* account for possibilty of data collection stretching between two months, and wanting one anomaly value (from one cruise)
+* account for possibility of data collection stretching between two months, and wanting one anomaly value (from one cruise)
   * once cruise_id is incorporated into metadata an option will be written into the function to group data by cruise rather than month
   
 * Ability to split data by section or station within data frame
   * Benoit's scripts split data by section or station before calculating anomalies
   
+* Difference in calculations between Benoit and Chantelle versions
+  * Due to difference in calculating monthly vs annual climatology
 
 
 
+```{r}
+
+# Benoit's method
+
+df_data_filtered_l <- Derived_Occupations_Sections
+
+df_data_filtered_l <- df_data_filtered_l %>%
+  select(., section, station, latitude, longitude, year, month, day, event_id, integrated_chlorophyll_0_100)
+
+##--------------------------------------------------------------------------------------------
+## annual climatology
+df_climatology_annual_l <- df_data_filtered_l %>%
+  dplyr::filter(., year>=1999, year<=2010) %>%
+  dplyr::group_by(.,  year) %>% # removed group by section
+  dplyr::summarise(., mean=mean(integrated_chlorophyll_0_100, na.rm=TRUE), sd=sd(integrated_chlorophyll_0_100, na.rm=TRUE)) %>%
+  dplyr::ungroup(.)
+
+
+
+  ##--------------------------------------------------------------------------------------------
+## annual anomalies
+df_anomaly_annual_l <- dplyr::left_join(df_data_filtered_l,
+                          df_climatology_annual_l ,
+                          by=c( "year")) %>% # removed section
+  dplyr::group_by(., year) %>%
+  dplyr::mutate(., value=(integrated_chlorophyll_0_100-mean)/sd) %>%
+  summarise(., annual_anomaly = mean(value, na.rm = TRUE)) %>%
+  dplyr::select(., year,  annual_anomaly) %>%
+  dplyr::ungroup(.)
+
+```
+
+
+```{r}
+
+# compare Benoit and Chantelle methods
+
+anncom <- cbind(df_anomaly_annual_l, ddann)
+par(mar = c(5, 4, 4, 4) + 0.3)  # Leave space for z axis
+plot(anncom$year, anncom$integrated_chlorophyll_0_100_anomaly, type = 'l', col = 'red', ylab = '', xlab = 'Year') # first plot
+par(new = TRUE)
+axis(side = 2, col = 'red')
+par(new = TRUE)
+plot(anncom$year, anncom$annual_anomaly, type = "l", col = 'blue', axes = FALSE, bty = "n", xlab = "", ylab = "")
+axis(side=4, at = pretty(range(anncom$annual_anomaly, na.rm = TRUE)), col = 'blue')
+mtext("annual anomaly - Benoit", side=4, line=3, col = 'blue')
+mtext("annual anomaly - Chantelle", side=2, line=3, col = 'red')
+
+
+```
 
 
