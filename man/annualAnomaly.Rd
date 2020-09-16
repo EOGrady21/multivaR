@@ -9,7 +9,7 @@ annualAnomaly(d, anomaly)
 \arguments{
 \item{d}{a data.frame containing year, month, and at least anomaly, and optionally normalizedAnomaly}
 
-\item{anomaly}{a character string naming the column of monthly anomaly which should be aggregated into annual anomaly}
+\item{anomaly}{a character string naming the column of \strong{monthly anomaly} which should be aggregated into annual anomaly}
 }
 \value{
 a data.frame with year, anomaly, and optionally normalizedAnomaly
@@ -18,6 +18,15 @@ a data.frame with year, anomaly, and optionally normalizedAnomaly
 This function calculates annual anomaly values from provided
 monthly anomaly values.
 }
-\author{
-Chantelle Layton
+\seealso{
+Other anomaly: 
+\code{\link{annualNormalizedAnomaly}()},
+\code{\link{monthlyAnomaly}()},
+\code{\link{monthlyClimatology}()},
+\code{\link{monthlyNormalizedAnomaly}()},
+\code{\link{monthlyStandardDeviation}()}
 }
+\author{
+Chantelle Layton, Emily Chisholm
+}
+\concept{anomaly}

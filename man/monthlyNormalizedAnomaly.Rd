@@ -26,6 +26,15 @@ monthly and standard deviation. The normalized anomaly values are calculated
 by subtracting the monthly climatology value from the monthly value, and the dividing it
 by the monthly climatology standard deviation.
 }
+\seealso{
+Other anomaly: 
+\code{\link{annualAnomaly}()},
+\code{\link{annualNormalizedAnomaly}()},
+\code{\link{monthlyAnomaly}()},
+\code{\link{monthlyClimatology}()},
+\code{\link{monthlyStandardDeviation}()}
+}
 \author{
 Chantelle Layton, Emily Chisholm
 }
+\concept{anomaly}

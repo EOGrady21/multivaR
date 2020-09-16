@@ -24,6 +24,15 @@ if desired.
 \description{
 This function calculates the monthly anomaly.
 }
+\seealso{
+Other anomaly: 
+\code{\link{annualAnomaly}()},
+\code{\link{annualNormalizedAnomaly}()},
+\code{\link{monthlyClimatology}()},
+\code{\link{monthlyNormalizedAnomaly}()},
+\code{\link{monthlyStandardDeviation}()}
+}
 \author{
 Chantelle Layton, Emily Chisholm
 }
+\concept{anomaly}

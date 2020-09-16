@@ -1,0 +1,126 @@
+"name","type","latitude","longitude","index"
+"HL2","station",44.2675,-63.3175,1
+"P5","station",44.9307,-66.8495,1
+"4VN","NAFO",45.8,-59.6,1
+"4VN","NAFO",45.8,-57.8,2
+"4VN","NAFO",46,-58,3
+"4VN","NAFO",46.2,-58.4,4
+"4VN","NAFO",46.4,-58.8,5
+"4VN","NAFO",46.6,-59,6
+"4VN","NAFO",46.8,-59.4,7
+"4VN","NAFO",47,-59.8,8
+"4VN","NAFO",47.2,-60,9
+"4VN","NAFO",47.2,-60.4,10
+"4VN","NAFO",47,-60.2,11
+"4VN","NAFO",46.6,-60.2,12
+"4VN","NAFO",46.7,-60,13
+"4VN","NAFO",46.7,-59.6,14
+"4VN","NAFO",46.4,-59.6,15
+"4VN","NAFO",46.2,-59,16
+"4VN","NAFO",46,-59,17
+"4VS","NAFO",43.8,-59,1
+"4VS","NAFO",44,-58.6,2
+"4VS","NAFO",44.2,-57.8,3
+"4VS","NAFO",44.4,-57.2,4
+"4VS","NAFO",44.6,-57,5
+"4VS","NAFO",45.2,-57,6
+"4VS","NAFO",45.4,-57.4,7
+"4VS","NAFO",45.6,-57.6,8
+"4VS","NAFO",45.6,-60,9
+"4VS","NAFO",44.2,-60,10
+"4VS","NAFO",44.2,-59,11
+"4W","NAFO",42.8,-63.2,1
+"4W","NAFO",42.8,-62.6,2
+"4W","NAFO",43,-61.6,3
+"4W","NAFO",43.2,-61,4
+"4W","NAFO",43.4,-60.2,5
+"4W","NAFO",43.6,-59.6,6
+"4W","NAFO",43.8,-59.2,7
+"4W","NAFO",44,-59.2,8
+"4W","NAFO",44,-60.2,9
+"4W","NAFO",45.6,-60.2,10
+"4W","NAFO",45.4,-60.4,11
+"4W","NAFO",45,-61.2,12
+"4W","NAFO",44.8,-61.8,13
+"4W","NAFO",44.6,-62.6,14
+"4W","NAFO",44.4,-63.2,15
+"4W","NAFO",44.4,-63.4,16
+"4W","NAFO",44.2,-63.2,17
+"4X","NAFO",42.2,-65.8,1
+"4X","NAFO",42.2,-65.2,2
+"4X","NAFO",42.4,-64.8,3
+"4X","NAFO",42.6,-64.4,4
+"4X","NAFO",42.8,-63.4,5
+"4X","NAFO",44.2,-63.4,6
+"4X","NAFO",44.2,-64,7
+"4X","NAFO",44,-64.2,8
+"4X","NAFO",43.8,-64.4,9
+"4X","NAFO",43.6,-64.8,10
+"4X","NAFO",43.4,-65.2,11
+"4X","NAFO",43,-65.4,12
+"4X","NAFO",43,-66.6,13
+"4X","NAFO",44,-66.6,14
+"4X","NAFO",44.2,-66.8,15
+"4X","NAFO",44.4,-66.4,16
+"4X","NAFO",44.6,-66.2,17
+"4X","NAFO",44.6,-66.4,18
+"4X","NAFO",44.4,-66.6,19
+"4X","NAFO",44.2,-67,20
+"4X","NAFO",44,-67.2,21
+"4X","NAFO",43.8,-67.2,22
+"4X","NAFO",43.6,-67.4,23
+"4X","NAFO",43.2,-67.4,24
+"4X","NAFO",43,-67.6,25
+"4X","NAFO",42.8,-67.4,26
+"4X","NAFO",42.6,-67.2,27
+"4X","NAFO",42.4,-67,28
+"4X","NAFO",42.4,-66,29
+"emerald_basin","Petrie Box",44.8,-61.4,1
+"emerald_basin","Petrie Box",44.35,-61,2
+"emerald_basin","Petrie Box",43.7,-62.15,3
+"emerald_basin","Petrie Box",43.71,-62.56,4
+"emerald_basin","Petrie Box",43.45,-62.75,5
+"emerald_basin","Petrie Box",43.32,-63.63,6
+"emerald_basin","Petrie Box",44.21,-63.07,7
+"emerald_basin","Petrie Box",44.8,-61.4,8
+"georges_basin","Petrie Box",42.79,-67,1
+"georges_basin","Petrie Box",42.56,-66.1,2
+"georges_basin","Petrie Box",42.18,-66.32,3
+"georges_basin","Petrie Box",42.18,-67,4
+"georges_basin","Petrie Box",42.18,-67.7,5
+"georges_basin","Petrie Box",42.58,-67.75,6
+"georges_basin","Petrie Box",42.79,-67,7
+"lurcher_shoal","Petrie Box",44.21,-66.5,1
+"lurcher_shoal","Petrie Box",43.4,-65.61,2
+"lurcher_shoal","Petrie Box",43.16,-65.6,3
+"lurcher_shoal","Petrie Box",43.1,-66.52,4
+"lurcher_shoal","Petrie Box",44.21,-66.5,5
+"misaine_bank","Petrie Box",46.02,-58.5,1
+"misaine_bank","Petrie Box",45.82,-58.2,2
+"misaine_bank","Petrie Box",45.12,-57.6,3
+"misaine_bank","Petrie Box",44.53,-59.35,4
+"misaine_bank","Petrie Box",44.66,-60,5
+"misaine_bank","Petrie Box",45.41,-60,6
+"misaine_bank","Petrie Box",46.02,-58.5,7
+"cabot_strait","Petrie Box",46.625,-60.35,1
+"cabot_strait","Petrie Box",46.925,-59.9333,2
+"cabot_strait","Petrie Box",47.15,-60.2833,3
+"cabot_strait","Petrie Box",47.0333,-60.4583,4
+"cabot_strait","Petrie Box",46.625,-60.35,5
+"cabot_strait","Petrie Box",46.925,-59.9333,6
+"cabot_strait","Petrie Box",47.15,-60.2833,7
+"cabot_strait","Petrie Box",47.455,-59.8417,8
+"cabot_strait","Petrie Box",47.2383,-59.4917,9
+"cabot_strait","Petrie Box",47.0033,-59.825,10
+"cabot_strait","Petrie Box",46.925,-59.9333,11
+"cabot_strait","Petrie Box",47.2383,-59.4917,12
+"cabot_strait","Petrie Box",47.455,-59.8417,13
+"cabot_strait","Petrie Box",47.8033,-59.3583,14
+"cabot_strait","Petrie Box",47.5833,-59.0167,15
+"cabot_strait","Petrie Box",47.2383,-59.4917,16
+"eastern_georges_bank","Petrie Box",42.18,-67,1
+"eastern_georges_bank","Petrie Box",42.18,-66.32,2
+"eastern_georges_bank","Petrie Box",41.9,-65.72,3
+"eastern_georges_bank","Petrie Box",41.5,-66,4
+"eastern_georges_bank","Petrie Box",41.5,-67,5
+"eastern_georges_bank","Petrie Box",42.18,-67,6

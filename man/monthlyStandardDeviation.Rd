@@ -22,6 +22,15 @@ This function calculates the monthly climatology standard deviation.
 Monthly climatology standard deviation is calculated by taking the values within the
 defined climatology range and finding the standard deviation for each month.
 }
+\seealso{
+Other anomaly: 
+\code{\link{annualAnomaly}()},
+\code{\link{annualNormalizedAnomaly}()},
+\code{\link{monthlyAnomaly}()},
+\code{\link{monthlyClimatology}()},
+\code{\link{monthlyNormalizedAnomaly}()}
+}
 \author{
 Chantelle Layton & Emily Chisholm
 }
+\concept{anomaly}

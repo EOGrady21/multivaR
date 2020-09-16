@@ -19,6 +19,15 @@ a data.frame with year, normalizedAnomaly, and other columns in d
 This function calculates normalized annual anomaly values from provided
 monthly anomaly values.
 }
+\seealso{
+Other anomaly: 
+\code{\link{annualAnomaly}()},
+\code{\link{monthlyAnomaly}()},
+\code{\link{monthlyClimatology}()},
+\code{\link{monthlyNormalizedAnomaly}()},
+\code{\link{monthlyStandardDeviation}()}
+}
 \author{
 Chantelle Layton
 }
+\concept{anomaly}

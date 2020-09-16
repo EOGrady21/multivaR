@@ -19,6 +19,15 @@ the results of aggregate
 \description{
 This function calculates the monthly climatology
 }
+\seealso{
+Other anomaly: 
+\code{\link{annualAnomaly}()},
+\code{\link{annualNormalizedAnomaly}()},
+\code{\link{monthlyAnomaly}()},
+\code{\link{monthlyNormalizedAnomaly}()},
+\code{\link{monthlyStandardDeviation}()}
+}
 \author{
 Chantelle Layton, Emily Chisholm
 }
+\concept{anomaly}

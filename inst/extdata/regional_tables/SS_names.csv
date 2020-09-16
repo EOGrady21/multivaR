@@ -1,0 +1,69 @@
+record,sname,lname
+1,SS1,Sydney Bight
+2,SS2,N Laurentian Channel
+3,SS3,S Laurentian Channel
+4,SS4,Banquereau
+5,SS5,Misaine Bank
+6,SS6,Canso
+7,SS7,Middle Bank
+8,SS8,Gully
+9,SS9,Sable Island
+10,SS10,Western Bank
+11,SS11,Emerald Bank
+12,SS12,Emerald Basin
+13,SS13,Eastern Shore
+14,SS14,South Shore
+15,SS15,Lahave Basin
+16,SS16,Saddle
+17,SS17,Lahave Bank
+18,SS18,Baccaro Bank
+19,SS19,Roseway Bank
+20,SS20,Shelburne
+21,SS21,Roseway Basin
+22,SS22,Browns Bank
+23,SS23,Roseway Channel
+24,SS24,Lurcher Shoals
+25,SS25,E Gulf Of Maine
+26,SS26,Georges Basin
+27,SS27,Georges Shoal
+28,SS28,E Georges Bank
+29,SS29,Ne Channel
+30,SS30,Southern Slope
+31,SS31,Southern Offshore
+32,SS32,Central Offshore
+33,SS33,Central Slope
+34,SS34,Northern Slope
+35,SS35,Northern Offshore
+36,SS36,Se Georges Bank
+37,SS37,Southern Georges Bank
+38,SS38,Central Georges Bank
+39,SS39,Sw Georges Bank
+40,SS40,Nw Georges Bank
+41,SS41,Massachusetts Offshore
+42,SS42,Rodgers Basin
+43,SS43,Crowell Basin
+44,SS44,Jordan Basin
+45,SS45,Truxton Basin
+46,SS46,Sigbee Basin
+47,SS47,Wilkinson Basin
+48,SS48,Jeffreys Ledge
+49,SS49,Massachusetts Inshore
+50,SS50,Southern Maine Inshore
+51,SS51,Platts Basin
+52,SS52,Central Maine Inshore
+53,SS53,Sw Fundy
+54,SS54,Central Fundy
+55,SS55,Ne Fundy
+56,SS56,Cape Cod Slope
+57,SS57,Nantucket Sound
+58,SS58,Nantucket Shoals
+59,SS59,Great South Channel
+60,SS60,Outer Nantucket Shoals
+61,SS61,Outer Great S Channel
+62,SS62,Nantucket Slope
+63,SS63,Nantucket Offshore
+64,SS64,Georges Slope
+65,SS65,Georges Offshore
+66,SS66,Cabot Strait West
+67,SS67,Cabot Strait Central
+68,SS68,Cabot Strait East

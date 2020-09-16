@@ -1,6 +1,223 @@
+
+# anomaly wrapper function to direct each data stream to correct anomaly function
+
+
+#' Anomaly function wrapper
+#'
+#' Directs data to appropriate anomaly calculation function within multivaR
+#' based on temporal and regional scales of data and metric type. All functions
+#' are desinged specifically to handle data from the `azmpdata` package. If a
+#' user wanted to modify these functions to use with external data sources,
+#' extrame caution should be taken.
+#'
+#' There are multiple anomaly function available within multivaR and each should
+#' be used in a different context with different data metrics.
+#' The functions wrapped within this function are as follows
+#' * Annual Anomaly caluclation with Annual climatology
+#'      * This is used in biogeochemical metric anomaly caluclations on a
+#'      regional scale for annual data
+#' * Monthly anomaly with monthly climatology
+#'      * This is used for some physical metrics using occupation temporal scale
+#'      data or monthly data
+#' * Annual anomaly from monthly climatology
+#'     * This is used for some physical metrics, it first calculates a monthly
+#'     anomaly and monthly climatology then aggregates the monthly data points
+#'     by year to calculate annual anomalies
+#' * Seasonal anomaly with seasonal climatology
+#'      * Used in some biolgoical metrics such as zooplankton biomass and
+#'      calanus finmarchicus abundance, requires some extra metadta to confirm
+#'      seasonal distinctions (not yet implemented)
+#'
+#' @param data A data frame from `azmpdata`
+#' @param anomalyType A character string, options 'annual', 'monthly' or
+#'   'seasonal' depending on the type of anomaly the user wishes to calculate
+#' @param climatologyYears a Vector of two numeric values determining the start
+#'   and end years of the period which will be used to calculate a climatology
+#' @param var Required only if using monthly or aggregate annual anomaly
+#'   calculations, character string describing the variable for which anomaly
+#'   should be calculated
+#' @param normalizedAnomaly Required only if using monthly or aggregate annual
+#'   anomaly calculations, logical indicating whether or not to normalize
+#'   anomaly calculations
+#'
+#' @return
+#' @export
+
+calculate_anomaly <- function(data, anomalyType, climatologyYears, var, normalizedAnomaly){
+
+  # check data frame input
+  # check what temporal scale
+  day <- grep(names(data), pattern = 'day')
+  month <- grep(names(data), pattern = 'month')
+  year <- grep(names(data), pattern = 'year')
+  calc_type <- NULL
+
+  if(length(day) + length(month) == 0 && anomalyType == 'annual'){
+    calc_type <- 'annual'
+  }
+  if (length(day) + length(month) != 0 && anomalyType == 'annual'){
+    calc_type <- 'ann_mon'
+    if(missing(var)){
+      stop('Please provide `var`, variable name for which anomaly should be calculated!')
+    }
+  }
+  if (length(day) + length(month) != 0 && anomalyType == 'monthly'){
+    calc_type <- 'monthly'
+    if(missing(var)){
+      stop('Please provide `var`, variable name for which anomaly should be calculated!')
+    }
+  }
+
+  # not ready yet
+  if(anomalyType == 'seasonal'){
+    calc_type <- 'seasonal'
+  }
+
+  if(is.null(calc_type)){
+    stop('Unable to determine anomaly calculation type!')
+  }
+
+
+  # check regions
+
+  # annual anomaly with annual climatology
+  if(calc_type == 'annual'){
+  output <- annualAnomaly_byRegion(data, climatolgoyYears = climatologyYears)
+  }
+  # monthly anomaly with monthly climatology
+
+  if(calc_type == 'monthly'){
+    output <- monthlyAnomaly(d = data, climatologyYears = climatologyYears, var = var, normalizedAnomaly = normalizedAnomaly)
+  }
+  # annual anomaly from monthly climatology
+
+  if(calc_type == 'ann_mon'){
+    if(normalizedAnomaly == TRUE){
+      anomaly_var <- paste0(var, '_normalizedAnomaly')
+    }else{
+    anomaly_var <- paste0(var, '_anomaly')
+    }
+    d1 <-  monthlyAnomaly(d = data, climatologyYears = climatologyYears, var = var, normalizedAnomaly = normalizedAnomaly)
+    output <- annualAnomaly(d = d1, anomaly = anomaly_var)
+  }
+
+  # not ready yet
+  if( calc_type == 'seasonal'){
+  # seasonal anomaly seasonal climatology
+  }
+
+
+  return(output)
+
+
+}
+
+
+
+
+
 # anomaly calculations
 # from Chantelle Layton and Benoit Casault
 
+
+
+# anomaly calculation Benoit style
+
+#' Annual Anomalies by region
+#'
+#' This function caluclates annual anomalies ONLY FROM annual data. It can
+#' accept annual data from multiple stations or sections in the same dataframe
+#' although users should be cautious that sections/ stations are properly
+#' labeled.
+#'
+#' @param data A data frame of annual data containing AT LEAST metadata columns,
+#'   year and section or station as well as one or more columns of data. If
+#'   gathering data from `azmpdata` package, data frame should be `...Annual_Section` or
+#'   `...Annual_Station` format.
+#'
+#' @param climatologyYears A vector of two numbers indicating the range to be used to calculate climatology (eg. c(1999, 2015))
+#' @return A data frame with annual anomalies named by the variable (NOTE: the anomalies are not named with 'anomaly', be careful of confusing with actual data values)
+#' @export
+#'
+#' @Author Benoit Casault & Emily Chisholm
+annualAnomaly_byRegion <- function(data, climatologyYears){
+
+  # carefully check if data is section or station
+  sec <- grep(names(data), pattern = 'section')
+  st <- grep(names(data), pattern = 'station')
+  sa <- grep(names(data), pattern = 'area')
+
+  if(length(sec) != 0){
+    type <- 'section'
+  }
+  if(length(st) != 0){
+    type <- 'station'
+  }
+  if(length(sa) != 0){
+    type <- 'area'
+  }
+  if(length(st) == 0 && length(sec) == 0 && length(sa) == 0){
+    stop("Unable to determine type of data, please ensure data has metadata column 'section', 'area' or 'station'!")
+  }
+
+  # produce warning if multiple lines are found per year
+  # NOTE this is a terrible check as it only checks the FIRST year in the data
+  # frame and does not account for multiple rows per year across different
+  # sections or stations
+  yearcheck <- unique(data$year)[1]
+
+  if(length(data[data$year == yearcheck,]) > 1){
+    warning('More than one row per year of data detected, ensure your data is in the correct format!')
+  }
+
+  # find variables not in metadata consistently
+  metadata_vars <- c('latitude', 'longitude', 'event_id', 'cruise_id', 'year') # add to list as necessary
+  metalist <- vector()
+  for(i in 1:length(data)){
+    # if unique values are repeated more than 20% of the time then likely metadata
+    # note this system is NOT PERFECT CAUTION
+    if(length(unique(data[[i]])) < (length(data[[1]]) - length(data[[1]])*0.2)){
+      warning(paste(names(data)[[i]], 'classified as metadata!'))
+      metalist <- c(metalist, i)
+    }
+    if(names(data)[[i]] %in% metadata_vars){
+      warning(paste(names(data)[[i]], 'classified as metadata!'))
+      metalist <- c(metalist, i)
+    }
+
+  }
+  metalist <- unique(metalist)
+
+  variable_ind <- c(1:length(data))
+  variable_ind <-variable_ind[-metalist]
+
+  # convert data to long format
+  data_long <- data %>%
+    tidyr::gather(variable, value, all_of(variable_ind)) %>% # gather variables not in metadata
+    dplyr::rename(region_name = all_of(type)) # name section, station or area column 'region_name' for consistent coding
+
+
+  # calculate climatology
+  df_climatology <- data_long %>%
+    dplyr::filter(year >= climatologyYears[1] & year <= climatologyYears[2]) %>%
+    dplyr::group_by(region_name, variable) %>%
+    dplyr::summarise(mean=mean(value, na.rm=T), sd=sd(value, na.rm=T)) %>%
+    dplyr::ungroup()
+
+  # calculate anomalies
+  df_Anomalies <- dplyr::left_join(data_long,
+                                   df_climatology,
+                                   by = c('region_name', "variable")) %>% # replaced hardcoded 'section' with region_name so function is more flexible (EC)
+    dplyr::mutate(value = (value - mean)/sd) %>%
+    dplyr::select(region_name, variable, year, value)
+
+  # convert data to wide format
+  final_df <- df_Anomalies %>%
+    tidyr::spread(variable, value)
+
+  # TODO: fix output to make variables named 'anomaly' to avoid confusion
+  return(final_df)
+}
 
 # TODO WARNING if cruise spans over 2 months say september 20th - October 3rd,
 # this script will calculate two monthly anomalies but it would be best for AZMP
