@@ -104,6 +104,7 @@ calculate_anomaly <- function(data, anomalyType, climatologyYears, var, normaliz
   # not ready yet
   if( calc_type == 'seasonal'){
   # seasonal anomaly seasonal climatology
+    output <- seasonalAnomaly(data, climatologyYears = climatologyYears)
   }
 
 
@@ -114,7 +115,65 @@ calculate_anomaly <- function(data, anomalyType, climatologyYears, var, normaliz
 
 
 
+#' Calculate seasonal anomalies
+#'
+#' Anomaly calculation for seasonal data from `azmpdata`
+#'
+#' Data frames should include a column with regional scale names, the column
+#' should be named `transect`, `station`, or `area`, else the function will not
+#' be able to detrmine the regional scale. The data frame should also have
+#' columns `variable`, `value`, `season`, and `year`.
+#'
+#' @param data A data frame from `azmpdata` containing seasonal average data
+#' @param climatologyYears A vector of two numbers indicating the start and end of the climatology period used to calculate anomalies
+#'
+#' @author Benoit Casault & Emily Chisholm
+#' @return a data frame with anomaly values
+#' @export
+#'
+#'
+#'
+seasonalAnomaly <- function(data, climatologyYears){
 
+  # fix names
+  transect <- grep(names(data), pattern = 'transect')
+  station <- grep(names(data), pattern = 'station')
+  area <- grep(names(data), pattern = 'area')
+
+  if(length(transect) > 0){
+    data <- dplyr::rename(data, region_name  = 'transect')
+  }
+  if(length(station) > 0){
+    data <- dplyr::rename(data, region_name  = 'station')
+  }
+  if(length(area) > 0){
+    data <- dplyr::rename(data, region_name  = 'area')
+  }
+
+  checknames <- grep(names(data), pattern = 'region_name')
+  if(length(checknames) == 0){
+    stop('Unable to determine regional data scale! Please ensure columns are properly named!')
+  }
+  ## seasonal climatology
+  climatology <- data %>%
+    dplyr::filter(., year>=climatologyYears[1], year<=climatologyYears[2]) %>%
+    dplyr::group_by(., variable, region_name, season) %>%
+    dplyr::summarise(., mean=mean(value, na.rm=TRUE), sd=sd(value, na.rm=TRUE)) %>%
+    dplyr::ungroup(.)
+
+  ## seasonal anomalies
+  anomaly <- dplyr::left_join(
+    data,
+    climatology %>%
+      dplyr::select(variable, mean, sd, region_name, season),
+    by = c("variable", "region_name", "season")
+  ) %>%
+    dplyr::mutate(., value = (value - mean) / sd) %>%
+    dplyr::select(., region_name, year, season, variable, value)
+
+  return(anomaly)
+
+}
 
 # anomaly calculations
 # from Chantelle Layton and Benoit Casault
