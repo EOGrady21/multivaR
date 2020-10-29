@@ -9,13 +9,13 @@ query <- function(search_key, location = 'title'){
   #'
   #' @param search_key Keyword(s) to search for in azmpdata, if using multiple keywords, provide vector of character strings
   #' @param location Where to search for keyword(s), options are 'title', or 'metadata'
-  #' @param logic character string specifying search logic, options are 'AND' to search for matches to ALL search_key terms, or 'OR' to search for matches to any search_key terms
   #'
+  #' @importFrom utils installed.packages
   #' @note Leave search_key blank `''` to return all available datasets
   #' @examples
-  #' /dontrun{
-  #' query(search_key = c('mean', 'chlorophyll'), location = 'metadata')
-  #' }
+  #'
+  #' query(search_key = c('broadscale'), location = 'title')
+  #'
   #'
   #'
   #' @export
@@ -27,7 +27,7 @@ query <- function(search_key, location = 'title'){
   }
 
   # check for azmpdata
-  if('azmpdata' %in% rownames(installed.packages()) == FALSE){
+  if('azmpdata' %in% rownames(utils::installed.packages()) == FALSE){
     stop('Please install azmpdata package before attempting to query!')
   }
   rda_list <- utils::data(package="azmpdata")

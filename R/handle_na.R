@@ -14,9 +14,9 @@
 #' @param data data frame or data table with missing values
 #' @param na_value The 'missing' value which will be translated to NA within
 #'   `data` (typically -99)
-#'  @param col Which column within `data` should be checked for missing values
+#' @param col Which column within `data` should be checked for missing values
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples

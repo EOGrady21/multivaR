@@ -2,12 +2,12 @@
 % Please edit documentation in R/plot_region.R
 \name{plot_region}
 \alias{plot_region}
-\title{Plot a data region \link{UNDER CONSTRUCTION}}
+\title{Plot a data region}
 \usage{
-plot_region(name, longitudelim, latitudelim, plot = TRUE)
+plot_region(name, longitudelim, latitudelim, plotval = TRUE)
 }
 \arguments{
-\item{name}{name of the region to visualize}
+\item{name}{name(s) of the region to visualize, if multiple stations are to be visualized (eg. to make up a section), include vector of character values}
 
 \item{longitudelim}{optional vector of two numbers describing longitude
 limits of plotting window (passed to /code{/link{oce::mapPlot}}), if no
@@ -17,9 +17,9 @@ value is given uses a maritimes centred default}
 of plotting window (passed to /code{/link{oce::mapPlot}}), if no value is
 given uses a maritimes centred default}
 
-\item{plot}{Logical value, if FALSE, will output data frame of coordinates
+\item{plotval}{Logical value, if FALSE, will output data frame of coordinates
 which can be plotted by user}
 }
 \description{
-Plot a data region \link{UNDER CONSTRUCTION}
+Plot a data region
 }

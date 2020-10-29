@@ -10,8 +10,6 @@ query(search_key, location = "title")
 \item{search_key}{Keyword(s) to search for in azmpdata, if using multiple keywords, provide vector of character strings}
 
 \item{location}{Where to search for keyword(s), options are 'title', or 'metadata'}
-
-\item{logic}{character string specifying search logic, options are 'AND' to search for matches to ALL search_key terms, or 'OR' to search for matches to any search_key terms}
 }
 \description{
 Search for matches to search term(s) within azmpdata package data objects
@@ -20,9 +18,9 @@ Search for matches to search term(s) within azmpdata package data objects
 Leave search_key blank \code{''} to return all available datasets
 }
 \examples{
-/dontrun{
-query(search_key = c('mean', 'chlorophyll'), location = 'metadata')
-}
+
+query(search_key = c('broadscale'), location = 'title')
+
 
 
 }

@@ -4,21 +4,18 @@
 \alias{PCA}
 \title{Principal component analysis for given set of variables
 Performs a principal components analysis using the stats package, on all
-variables provided in \code{data} with the exception of \code{year}. Converts to
+variables provided in \code{data}. Converts to
 data.table and removes duplicate or incomplete rows before processing.}
 \usage{
 PCA(data)
 }
 \arguments{
-\item{data}{a datatable or dataframe with varibles to be analyzed for PCA}
-}
-\value{
-
+\item{data}{a datatable or dataframe with varibles to be analyzed for PCA, note the dat atable provided should be a subset excluding any metadata columns}
 }
 \description{
 Principal component analysis for given set of variables
 Performs a principal components analysis using the stats package, on all
-variables provided in \code{data} with the exception of \code{year}. Converts to
+variables provided in \code{data}. Converts to
 data.table and removes duplicate or incomplete rows before processing.
 }
 \author{

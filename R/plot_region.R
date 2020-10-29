@@ -17,11 +17,11 @@
 
 # attempt to plot
 
-#' Plot a data region [UNDER CONSTRUCTION]
+#' Plot a data region
 #'
 #'
-#' @param name name of the region to visualize
-#' @param plot Logical value, if FALSE, will output data frame of coordinates
+#' @param name name(s) of the region to visualize, if multiple stations are to be visualized (eg. to make up a section), include vector of character values
+#' @param plotval Logical value, if FALSE, will output data frame of coordinates
 #'   which can be plotted by user
 #' @param longitudelim optional vector of two numbers describing longitude
 #'   limits of plotting window (passed to /code{/link{oce::mapPlot}}), if no
@@ -30,40 +30,58 @@
 #'   of plotting window (passed to /code{/link{oce::mapPlot}}), if no value is
 #'   given uses a maritimes centred default
 #'
-#'
+#' @importFrom utils read.csv
+#' @importFrom graphics par
 #' @export
 #'
 #'
-plot_region <- function(name, longitudelim, latitudelim, plot = TRUE){
+plot_region <- function(name, longitudelim, latitudelim, plotval = TRUE){
+
+  oldpar <- graphics::par(no.readonly = TRUE)
+  on.exit(graphics::par(oldpar))
+
+
   # get table
-  sysreg_att<- system.file('extdata/', 'regional_attributes.csv', package = 'multivaR', mustWork = TRUE) # will these files actually be in azmpdata?
-  sysreg_geo<- system.file('extdata/', 'regional_geometry.csv', package = 'multivaR', mustWork = TRUE)
+  sysreg_att<- system.file('extdata/', 'polygons_attributes.csv', package = 'multivaR', mustWork = TRUE) # will these files actually be in azmpdata?
+  sysreg_geo<- system.file('extdata/', 'polygons_geometry.csv', package = 'multivaR', mustWork = TRUE)
 
-  regtab_att <- read.csv(sysreg)
-  regtab_geo <- read.csv(sysreg)
+  regtab_att <- utils::read.csv(sysreg_att)
+  regtab_geo <- utils::read.csv(sysreg_geo)
 
 
+  # find name in short or long names
+  col_index <- grep(regtab_att, pattern = name) # may need to change to regexpr to grab only exact matches of name (start to finish)
+  # when multiple names are being searched could result in error if user mixes up sname and lname within single vector or if one name is invalid
+
+  ci <- name %in% regtab_att[,col_index]
+  if(all(ci) == FALSE){
+    stop('Not all names found in data! Please ensure all names are valid!')
+  }
   # find region to plot
-  subtab_att <- regtab_att[regtab_att$name == name,] # check for short and long names
+  subtab_att <- regtab_att[regtab_att[,col_index] %in% name,] # check for short and long names
 
   if(length(subtab_att[[1]]) == 0){
     stop('No data found for region specified!')
   }
   # check type
-  type <- unique(subtab_att$type)
-  if (length(type) > 1){
-    stop('Attempting to plot multiple types of regions!')
-  }
+  # type <- unique(subtab_att$type)
+  # if (length(type) > 1){
+  #   stop('Attempting to plot multiple types of regions!')
+  # }
 
   # get record ID for named region
-  id <- unique(subtab_att$record_id)
+  id <- unique(subtab_att$record)
 
+  # TODO: should be some way of removing duplicates? eg HL2 problem
 
   # get geo data matching record ID
 
-  subtab_geo <- regtab_geo[regtab_geo$record_id == id,]
+  subtab_geo <- regtab_geo[regtab_geo$record %in% id,]
 
 
+  if(length(subtab_geo[1,]) == 0){
+    stop('No geometric data found for this record!')
+  }
 
   # set general region to plot
   # maritimes default
@@ -74,13 +92,16 @@ plot_region <- function(name, longitudelim, latitudelim, plot = TRUE){
   latitudelim <- c(50, 40)
   }
 
-if (plot == TRUE){
+if (plotval == TRUE){
   oce::mapPlot( longitudelim = longitudelim, latitudelim = latitudelim , border = 'green', type = 'polygon')
-  par(new = TRUE)
-  oce::mapPlot(longitude = subtab$longitude, latitude = subtab$latitude, type = 'o',  longitudelim = longitudelim, latitudelim = latitudelim)
+  graphics::par(new = TRUE)
+  oce::mapPlot(longitude = subtab_geo$longitude, latitude = subtab_geo$latitude, type = 'o',  longitudelim = longitudelim, latitudelim = latitudelim)
 
 }else{
   # plot == FALSE
+  # combine att and geo
+
+  subtab <- list(attributes = subtab_att, geometry = subtab_geo)
   return(subtab)
 }
 

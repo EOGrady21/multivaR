@@ -4,12 +4,14 @@
 \alias{annualAnomaly}
 \title{Calculate annual anomaly values}
 \usage{
-annualAnomaly(d, anomaly)
+annualAnomaly(d, anomaly, warnings = TRUE)
 }
 \arguments{
 \item{d}{a data.frame containing year, month, and at least anomaly, and optionally normalizedAnomaly}
 
 \item{anomaly}{a character string naming the column of \strong{monthly anomaly} which should be aggregated into annual anomaly}
+
+\item{warnings}{Logical determining if warning messages are output}
 }
 \value{
 a data.frame with year, anomaly, and optionally normalizedAnomaly

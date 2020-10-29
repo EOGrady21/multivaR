@@ -13,11 +13,9 @@ handle_na(data, na_value, col)
 \item{data}{data frame or data table with missing values}
 
 \item{na_value}{The 'missing' value which will be translated to NA within
-\code{data} (typically -99)
-@param col Which column within \code{data} should be checked for missing values}
-}
-\value{
+\code{data} (typically -99)}
 
+\item{col}{Which column within \code{data} should be checked for missing values}
 }
 \description{
 Handle missing values

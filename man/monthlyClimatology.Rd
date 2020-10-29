@@ -10,8 +10,9 @@ monthlyClimatology(d, climatologyYears, var)
 \item{d}{a data.frame containing at least a column named month and one other variable}
 
 \item{climatologyYears}{a vector of length two indicating the range of years
-to calculate the climatology
-@param var name of variable of which anomaly should be calculated (present in `d``)}
+to calculate the climatology}
+
+\item{var}{name of variable of which anomaly should be calculated (present in `d``)}
 }
 \value{
 the results of aggregate

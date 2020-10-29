@@ -25,7 +25,7 @@
 #'     by year to calculate annual anomalies
 #' * Seasonal anomaly with seasonal climatology
 #'      * Used in some biolgoical metrics such as zooplankton biomass and
-#'      calanus finmarchicus abundance, requires some extra metadta to confirm
+#'      calanus finmarchicus abundance, requires some extra metadata to confirm
 #'      seasonal distinctions (not yet implemented)
 #'
 #' @param data A data frame from `azmpdata`
@@ -40,16 +40,16 @@
 #'   anomaly calculations, logical indicating whether or not to normalize
 #'   anomaly calculations
 #'
-#' @return
+#'
 #' @export
 
 calculate_anomaly <- function(data, anomalyType, climatologyYears, var, normalizedAnomaly){
 
   # check data frame input
   # check what temporal scale
-  day <- grep(names(data), pattern = 'day')
-  month <- grep(names(data), pattern = 'month')
-  year <- grep(names(data), pattern = 'year')
+  day <- grep(names(data), pattern = '^day$')
+  month <- grep(names(data), pattern = '^month$')
+  year <- grep(names(data), pattern = '^year$')
   calc_type <- NULL
 
   if(length(day) + length(month) == 0 && anomalyType == 'annual'){
@@ -82,7 +82,7 @@ calculate_anomaly <- function(data, anomalyType, climatologyYears, var, normaliz
 
   # annual anomaly with annual climatology
   if(calc_type == 'annual'){
-  output <- annualAnomaly_byRegion(data, climatolgoyYears = climatologyYears)
+  output <- annualAnomaly_byRegion(data, climatologyYears = climatologyYears)
   }
   # monthly anomaly with monthly climatology
 
@@ -92,19 +92,21 @@ calculate_anomaly <- function(data, anomalyType, climatologyYears, var, normaliz
   # annual anomaly from monthly climatology
 
   if(calc_type == 'ann_mon'){
+    # browser()
     if(normalizedAnomaly == TRUE){
       anomaly_var <- paste0(var, '_normalizedAnomaly')
-    }else{
+    }
+    if(normalizedAnomaly == FALSE){
     anomaly_var <- paste0(var, '_anomaly')
     }
     d1 <-  monthlyAnomaly(d = data, climatologyYears = climatologyYears, var = var, normalizedAnomaly = normalizedAnomaly)
-    output <- annualAnomaly(d = d1, anomaly = anomaly_var)
+    output <- annualAnomaly(d = d1, anomaly = anomaly_var, warnings = FALSE)
   }
 
   # not ready yet
   if( calc_type == 'seasonal'){
   # seasonal anomaly seasonal climatology
-    output <- seasonalAnomaly(data, climatologyYears = climatologyYears)
+    output <- seasonalAnomaly(data, climatologyYears = climatologyYears, warnings = FALSE)
   }
 
 
@@ -126,6 +128,7 @@ calculate_anomaly <- function(data, anomalyType, climatologyYears, var, normaliz
 #'
 #' @param data A data frame from `azmpdata` containing seasonal average data
 #' @param climatologyYears A vector of two numbers indicating the start and end of the climatology period used to calculate anomalies
+#' @param warnings Logical determines whether warning messages are output
 #'
 #' @author Benoit Casault & Emily Chisholm
 #' @return a data frame with anomaly values
@@ -133,7 +136,7 @@ calculate_anomaly <- function(data, anomalyType, climatologyYears, var, normaliz
 #'
 #'
 #'
-seasonalAnomaly <- function(data, climatologyYears){
+seasonalAnomaly <- function(data, climatologyYears, warnings = TRUE){
 
   # fix names
   transect <- grep(names(data), pattern = 'transect')
@@ -154,8 +157,38 @@ seasonalAnomaly <- function(data, climatologyYears){
   if(length(checknames) == 0){
     stop('Unable to determine regional data scale! Please ensure columns are properly named!')
   }
+
+  # find variables not in metadata consistently
+  metadata_vars <- c('latitude', 'longitude', 'event_id', 'cruise_id', 'year', 'region_name') # add to list as necessary
+  metalist <- vector()
+  for(i in 1:length(data)){
+    # if unique values are repeated more than 20% of the time then likely metadata
+    # note this system is NOT PERFECT CAUTION
+    if(length(unique(data[[i]])) < (length(data[[1]]) - length(data[[1]])*0.2)){
+      if(warnings == TRUE){
+      warning(paste(names(data)[[i]], 'classified as metadata!'))
+      }
+      metalist <- c(metalist, i)
+    }
+    if(names(data)[[i]] %in% metadata_vars){
+      if(warnings == TRUE){
+      warning(paste(names(data)[[i]], 'classified as metadata!'))
+      }
+      metalist <- c(metalist, i)
+    }
+
+  }
+  metalist <- unique(metalist)
+
+  variable_ind <- c(1:length(data))
+  variable_ind <-variable_ind[-metalist]
+
+  # convert data to long format
+  data_long <- data %>%
+    tidyr::gather(variable, value, all_of(variable_ind))# gather variables not in metadata
+
   ## seasonal climatology
-  climatology <- data %>%
+  climatology <- data_long %>%
     dplyr::filter(., year>=climatologyYears[1], year<=climatologyYears[2]) %>%
     dplyr::group_by(., variable, region_name, season) %>%
     dplyr::summarise(., mean=mean(value, na.rm=TRUE), sd=sd(value, na.rm=TRUE)) %>%
@@ -163,7 +196,7 @@ seasonalAnomaly <- function(data, climatologyYears){
 
   ## seasonal anomalies
   anomaly <- dplyr::left_join(
-    data,
+    data_long,
     climatology %>%
       dplyr::select(variable, mean, sd, region_name, season),
     by = c("variable", "region_name", "season")
@@ -171,7 +204,11 @@ seasonalAnomaly <- function(data, climatologyYears){
     dplyr::mutate(., value = (value - mean) / sd) %>%
     dplyr::select(., region_name, year, season, variable, value)
 
-  return(anomaly)
+  # convert data to wide format
+  final_df <- anomaly %>%
+    tidyr::spread(variable, value)
+
+  return(final_df)
 
 }
 
@@ -196,6 +233,7 @@ seasonalAnomaly <- function(data, climatologyYears){
 #'
 #' @param climatologyYears A vector of two numbers indicating the range to be used to calculate climatology (eg. c(1999, 2015))
 #' @return A data frame with annual anomalies named by the variable (NOTE: the anomalies are not named with 'anomaly', be careful of confusing with actual data values)
+#' @importFrom dplyr %>% all_of
 #' @export
 #'
 #' @Author Benoit Casault & Emily Chisholm
@@ -252,8 +290,8 @@ annualAnomaly_byRegion <- function(data, climatologyYears){
 
   # convert data to long format
   data_long <- data %>%
-    tidyr::gather(variable, value, all_of(variable_ind)) %>% # gather variables not in metadata
-    dplyr::rename(region_name = all_of(type)) # name section, station or area column 'region_name' for consistent coding
+    tidyr::gather(variable, value, dplyr::all_of(variable_ind)) %>% # gather variables not in metadata
+    dplyr::rename(region_name = dplyr::all_of(type)) # name section, station or area column 'region_name' for consistent coding
 
 
   # calculate climatology
@@ -323,9 +361,10 @@ monthlyAnomaly <- function(d, climatologyYears, var, normalizedAnomaly = TRUE){
   newname <- paste0(var, '_anomaly')
   eval(parse(text = paste('dd <- dplyr::rename(dd, ',newname,' = anomaly)')))
 
+  if(normalizedAnomaly == TRUE){
   normnewname <- paste0(var, '_normalizedAnomaly')
   eval(parse(text = paste('dd <- dplyr::rename(dd, ',normnewname,' = normalizedAnomaly)')))
-
+  }
   return(dd)
 }
 
@@ -336,7 +375,7 @@ monthlyAnomaly <- function(d, climatologyYears, var, normalizedAnomaly = TRUE){
 #' @param d a data.frame containing at least a column named month and one other variable
 #' @param climatologyYears a vector of length two indicating the range of years
 #' to calculate the climatology
-#'  @param var name of variable of which anomaly should be calculated (present in `d``)
+#' @param var name of variable of which anomaly should be calculated (present in `d``)
 #'
 #' @return the results of aggregate
 #'
@@ -394,6 +433,7 @@ monthlyNormalizedAnomaly <- function(d, climatologyYears, var){
 #'
 #' @param d a data.frame containing year, month, and at least anomaly, and optionally normalizedAnomaly
 #' @param anomaly a character string naming the column of __monthly anomaly__ which should be aggregated into annual anomaly
+#' @param warnings Logical determining if warning messages are output
 #'
 #' @return a data.frame with year, anomaly, and optionally normalizedAnomaly
 #'
@@ -403,10 +443,12 @@ monthlyNormalizedAnomaly <- function(d, climatologyYears, var){
 #'
 #' @export
 
-annualAnomaly <- function(d, anomaly){
+annualAnomaly <- function(d, anomaly, warnings = TRUE){
   anomcheck <- grep(anomaly, pattern = 'anomaly')
   if(length(anomcheck) == 0){
+    if(warnings == TRUE){
     warning(paste('Are you sure ', anomaly, 'is a monthly anomaly column?'))
+    }
   }
   eval(parse(text = paste('aa <- aggregate(', anomaly,' ~ year, d, mean, na.rm = TRUE)')))
   return(aa)
@@ -444,7 +486,7 @@ annualNormalizedAnomaly <- function(d, climatologyYears){
 #'
 #' @param d a data.frame containing at least a column named month and one other variable
 #' @param climatologyYears a vector of length two indicating the range of years
-#'  @param var name of variable of which anomaly should be calculated (present in `d``)
+#' @param var name of variable of which anomaly should be calculated (present in `d``)
 #'
 #' @return the results of the aggregate function, a data.frame with columns `month` and `temperature`
 #'

@@ -9,8 +9,9 @@ monthlyStandardDeviation(d, climatologyYears, var)
 \arguments{
 \item{d}{a data.frame containing at least a column named month and one other variable}
 
-\item{climatologyYears}{a vector of length two indicating the range of years
-@param var name of variable of which anomaly should be calculated (present in `d``)}
+\item{climatologyYears}{a vector of length two indicating the range of years}
+
+\item{var}{name of variable of which anomaly should be calculated (present in `d``)}
 }
 \value{
 the results of the aggregate function, a data.frame with columns \code{month} and \code{temperature}

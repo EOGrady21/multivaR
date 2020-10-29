@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(multivaR)
+ library(multivaR)
 library(dplyr)
 library(data.table)
 ```
@@ -37,12 +37,12 @@ library(azmpdata)
 query(search_key = '')
 
 # load in desired data frames
-data("nitrate_inventory_timeseries_hl2")
-data("chlorophyll_inventory_timeseries_hl2")
+data("Derived_Occupations_Sections")
+data("Zooplankton_Occupations_Sections")
 
 # collate data frames
 
-datfr <- right_join(chlorophyll_inventory_timeseries_hl2, nitrate_inventory_timeseries_hl2)
+datfr <- right_join(Derived_Occupations_Sections, Zooplankton_Occupations_Sections) 
 
 ```
 
@@ -51,10 +51,10 @@ If anomalies need to be calculated, multivaR has options for calculating monthly
 ```{r}
 # monthly anomalies must be caluclated before annual anomalies (annual anomaly function simply combines monthly anomalies)
 
-danomalies <- monthlyAnomaly(datfr, climatologyYears = c(1999, 2010), var = 'chl_0_100')
+danomalies <- monthlyAnomaly(datfr, climatologyYears = c(1999, 2010), var = 'integrated_chlorophyll_0_100')
 
 # annual anomalies function creates new data frame with just year and variable
-chl_annual_anomalies <- annualAnomaly(danomalies, anomaly = 'chl_0_100_anomaly')
+chl_annual_anomalies <- annualAnomaly(danomalies, anomaly = 'integrated_chlorophyll_0_100_anomaly')
 
 ```
 A note on caluclatinng anomalies, reference periods are used to create climatologies to calculate anomalies in this method. If you are unsure of a proper reference period for your data, follow these rules:
@@ -66,7 +66,7 @@ Once data is assembled, PCA can be run
 
 
 ```{r}
-PCA(datfr)
+PCA(datfr[,9:15]) # subset dat aframe to exclude metadata columns
 
 ```
 
