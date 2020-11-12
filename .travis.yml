@@ -1,0 +1,8 @@
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
+language: r
+addons:
+  apt:
+    packages: libmagick++-dev
+notifications:
+  slack: biozooplanktonlab:lOhK5bfxMxUVKqFFQZIlr8yD
