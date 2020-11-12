@@ -56,17 +56,21 @@ danomalies <- monthlyAnomaly(datfr, climatologyYears = c(1999, 2010), var = 'int
 # annual anomalies function creates new data frame with just year and variable
 chl_annual_anomalies <- annualAnomaly(danomalies, anomaly = 'integrated_chlorophyll_0_100_anomaly')
 
-```
-A note on caluclatinng anomalies, reference periods are used to create climatologies to calculate anomalies in this method. If you are unsure of a proper reference period for your data, follow these rules:
+# if you are unsure which anomaly calculation to use you can use the wrapper function which will select the appropriate method 
+calculate_anomaly(data = datfr, anomalyType = 'monthly', climatologyYears = c(1999, 2010), var = 'integrated_chlorophyll_0_100', normalizedAnomaly = TRUE)
 
-* 
+
+calculate_anomaly(data = datfr, anomalyType = 'seasonal', climatologyYears = c(1999, 2010))
+
+```
+A note on caluclatinng anomalies, reference periods are used to create climatologies to calculate anomalies in this method. The current standard reference period is ... 
 
 
 Once data is assembled, PCA can be run
 
 
 ```{r}
-PCA(datfr[,9:15]) # subset dat aframe to exclude metadata columns
+PCA(datfr[,9:15]) # subset dataframe to exclude metadata columns
 
 ```
 

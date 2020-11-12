@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # multivaR
 
 <!-- badges: start -->
+[![Travis build status](https://travis-ci.com/Echisholm21/multivaR.svg?branch=master)](https://travis-ci.com/Echisholm21/multivaR)
 <!-- badges: end -->
 
 The goal of multivaR is to organize and simplify the process of creating a multivariate analysis. This package can format data as well as caluclate anomalies from raw data, once data is formatted the package can be used to run Principal Components Analysis on multiple variables. 

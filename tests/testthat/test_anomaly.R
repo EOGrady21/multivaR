@@ -90,6 +90,10 @@ test_that('anomaly wrapper',{
   expect_error(ann_anom_err <- calculate_anomaly(data = data, anomalyType = 'annual', climatologyYears = c(1999, 2010)))
 
 
+  # seasonal
+  expect_silent(sea_anom <- calculate_anomaly(data = seasonal_data, anomalyType = 'seasonal', climatologyYears = c(1999, 2010)))
+  expect_true(is.data.frame(sea_anom))
+
 
 })
 

@@ -5,10 +5,12 @@
 query <- function(search_key, location = 'title'){
   #' Query azmpdata Data products
   #'
-  #' Search for matches to search term(s) within azmpdata package data objects
+  #' Search for matches to search term(s) within azmpdata package data objects. Other search functions that may be useful include
+  #'  \code{\link{azmpdata::lookup_variable}} (which allows searching of the detailed variable table - including descriptions of all variables)
+  #'  or \code{\link{azmpdata::variable_lookup}} (which also searches through dataframe titles)
   #'
   #' @param search_key Keyword(s) to search for in azmpdata, if using multiple keywords, provide vector of character strings
-  #' @param location Where to search for keyword(s), options are 'title', or 'metadata'
+  #' @param location Where to search for keyword(s), options are 'title' (which searches through the titles of data frames), or 'metadata' (which searches through the descriptions of dataframes)
   #'
   #' @importFrom utils installed.packages
   #' @note Leave search_key blank `''` to return all available datasets
@@ -17,7 +19,7 @@ query <- function(search_key, location = 'title'){
   #' query(search_key = c('broadscale'), location = 'title')
   #'
   #'
-  #'
+  #' @family search
   #' @export
 
   # confirm search location

@@ -139,14 +139,14 @@ calculate_anomaly <- function(data, anomalyType, climatologyYears, var, normaliz
 seasonalAnomaly <- function(data, climatologyYears, warnings = TRUE){
 
   # fix names
-  transect <- grep(names(data), pattern = 'transect')
+  section <- grep(names(data), pattern = 'section')
   station <- grep(names(data), pattern = 'station')
   area <- grep(names(data), pattern = 'area')
 
-  if(length(transect) > 0){
-    data <- dplyr::rename(data, region_name  = 'transect')
+  if(length(section) > 0){
+    data <- dplyr::rename(data, region_name  = 'section')
   }
-  if(length(station) > 0){
+  if(length(section) == 0 && length(station) > 0){ # section data contains section and station columns
     data <- dplyr::rename(data, region_name  = 'station')
   }
   if(length(area) > 0){
@@ -159,12 +159,12 @@ seasonalAnomaly <- function(data, climatologyYears, warnings = TRUE){
   }
 
   # find variables not in metadata consistently
-  metadata_vars <- c('latitude', 'longitude', 'event_id', 'cruise_id', 'year', 'region_name') # add to list as necessary
+  metadata_vars <- c('latitude', 'longitude', 'event_id', 'cruise_id', 'year', 'region_name', 'month', 'day', 'season', 'sample_id') # add to list as necessary
   metalist <- vector()
   for(i in 1:length(data)){
     # if unique values are repeated more than 20% of the time then likely metadata
     # note this system is NOT PERFECT CAUTION
-    if(length(unique(data[[i]])) < (length(data[[1]]) - length(data[[1]])*0.2)){
+    if(length(unique(na.omit(data[[i]]))) < (length(data[[1]]) - length(data[[1]])*0.2)){
       if(warnings == TRUE){
       warning(paste(names(data)[[i]], 'classified as metadata!'))
       }
@@ -204,11 +204,12 @@ seasonalAnomaly <- function(data, climatologyYears, warnings = TRUE){
     dplyr::mutate(., value = (value - mean) / sd) %>%
     dplyr::select(., region_name, year, season, variable, value)
 
-  # convert data to wide format
-  final_df <- anomaly %>%
-    tidyr::spread(variable, value)
+  # TODO fix wide format
+  # # convert data to wide format
+  # final_df <- anomaly %>%
+  #   tidyr::pivot_wider(names_from = c(variable, season, year, region_name), values_from = value)
 
-  return(final_df)
+  return(anomaly)
 
 }
 

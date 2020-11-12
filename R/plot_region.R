@@ -20,7 +20,7 @@
 #' Plot a data region
 #'
 #'
-#' @param name name(s) of the region to visualize, if multiple stations are to be visualized (eg. to make up a section), include vector of character values
+#' @param name name(s) of the region to visualize, if multiple stations are to be visualized (eg. to make up a section), should be a  vector of character values
 #' @param plotval Logical value, if FALSE, will output data frame of coordinates
 #'   which can be plotted by user
 #' @param longitudelim optional vector of two numbers describing longitude

@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![Travis build
+status](https://travis-ci.com/Echisholm21/multivaR.svg?branch=master)](https://travis-ci.com/Echisholm21/multivaR)
 <!-- badges: end -->
 
 The goal of multivaR is to organize and simplify the process of creating

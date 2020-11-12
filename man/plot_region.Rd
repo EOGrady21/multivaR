@@ -7,7 +7,7 @@
 plot_region(name, longitudelim, latitudelim, plotval = TRUE)
 }
 \arguments{
-\item{name}{name(s) of the region to visualize, if multiple stations are to be visualized (eg. to make up a section), include vector of character values}
+\item{name}{name(s) of the region to visualize, if multiple stations are to be visualized (eg. to make up a section), should be a  vector of character values}
 
 \item{longitudelim}{optional vector of two numbers describing longitude
 limits of plotting window (passed to /code{/link{oce::mapPlot}}), if no
