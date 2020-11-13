@@ -6,3 +6,5 @@ addons:
     packages: libmagick++-dev
 notifications:
   slack: biozooplanktonlab:lOhK5bfxMxUVKqFFQZIlr8yD
+before_install:
+  - sudo $(which R) CMD javareconf
