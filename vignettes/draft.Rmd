@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
  library(multivaR)
 library(dplyr)
 library(data.table)
+library(devtools)
 ```
 
 
