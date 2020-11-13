@@ -25,7 +25,7 @@ devtools::install_github("Echisholm21/multivaR")
 ```
 
 multivaR is designed to work with other packages developed by the Data
-Access team at Bedford Institute of Oceanogrpahy (BIO). Specifically,
+Access team at Bedford Institute of Oceanography (BIO). Specifically,
 this package is designed to work with data which is supplied through the
 `azmpdata` package. This supplementary package can be installed by
 using:
