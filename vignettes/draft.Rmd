@@ -32,7 +32,7 @@ Step one is to assemble all the data for different variables into a single dataf
 
 # search for azmpdata
 # if azmpdata is not downloaded:
-# devtools::install_github("casaultb/azmpdata")
+devtools::install_github("casaultb/azmpdata")
 library(azmpdata)
 query(search_key = '')
 
