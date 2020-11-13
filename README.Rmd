@@ -44,7 +44,57 @@ This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
 library(multivaR)
+library(dplyr)
+library(data.table)
+library(devtools)
 ## basic example code
+
+# step 1: assemble data
+
+# search for azmpdata
+# if azmpdata is not downloaded:
+if(!'azmpdata' %in% installed.packages()){devtools::install_github("casaultb/azmpdata")}
+library(azmpdata)
+query(search_key = '')
+
+# load in desired data frames
+data("Derived_Occupations_Sections")
+data("Zooplankton_Occupations_Sections")
+
+# collate data frames
+
+datfr <- right_join(Derived_Occupations_Sections, Zooplankton_Occupations_Sections) 
+
+```
+
+
+If anomalies need to be calculated, multivaR has options for calculating monthly or annual anomalies with or without normalization.
+
+```{r}
+# monthly anomalies must be caluclated before annual anomalies (annual anomaly function simply combines monthly anomalies)
+
+danomalies <- monthlyAnomaly(datfr, climatologyYears = c(1999, 2010), var = 'integrated_chlorophyll_0_100')
+
+# annual anomalies function creates new data frame with just year and variable
+chl_annual_anomalies <- annualAnomaly(danomalies, anomaly = 'integrated_chlorophyll_0_100_anomaly')
+
+# if you are unsure which anomaly calculation to use you can use the wrapper function which will select the appropriate method 
+anom_1 <- calculate_anomaly(data = datfr, anomalyType = 'monthly', climatologyYears = c(1999, 2010), var = 'integrated_chlorophyll_0_100', normalizedAnomaly = TRUE)
+head(anom_1)
+
+
+anom_2 <- calculate_anomaly(data = datfr, anomalyType = 'seasonal', climatologyYears = c(1999, 2010))
+head(anom_2)
+```
+
+
+
+Once data is assembled, PCA can be run
+
+
+```{r}
+PCA(datfr[,9:15]) # subset dataframe to exclude metadata columns
+
 ```
 
 

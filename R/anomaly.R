@@ -141,25 +141,25 @@ seasonalAnomaly <- function(data, climatologyYears, warnings = TRUE){
   # fix names
   section <- grep(names(data), pattern = 'section')
   station <- grep(names(data), pattern = 'station')
-  area <- grep(names(data), pattern = 'area')
+  area <- grep(names(data), pattern = 'area')#TODO should this actually be region?
 
   if(length(section) > 0){
-    data <- dplyr::rename(data, region_name  = 'section')
+    data <- dplyr::rename(data, type_name  = 'section')
   }
   if(length(section) == 0 && length(station) > 0){ # section data contains section and station columns
-    data <- dplyr::rename(data, region_name  = 'station')
+    data <- dplyr::rename(data, type_name  = 'station')
   }
   if(length(area) > 0){
-    data <- dplyr::rename(data, region_name  = 'area')
+    data <- dplyr::rename(data, type_name  = 'area') #TODO should this actually be region?
   }
 
-  checknames <- grep(names(data), pattern = 'region_name')
+  checknames <- grep(names(data), pattern = 'type_name')
   if(length(checknames) == 0){
     stop('Unable to determine regional data scale! Please ensure columns are properly named!')
   }
 
   # find variables not in metadata consistently
-  metadata_vars <- c('latitude', 'longitude', 'event_id', 'cruise_id', 'year', 'region_name', 'month', 'day', 'season', 'sample_id') # add to list as necessary
+  metadata_vars <- c('latitude', 'longitude', 'event_id', 'cruise_id', 'year', 'type_name', 'month', 'day', 'season', 'sample_id') # add to list as necessary
   metalist <- vector()
   for(i in 1:length(data)){
     # if unique values are repeated more than 20% of the time then likely metadata
@@ -190,7 +190,7 @@ seasonalAnomaly <- function(data, climatologyYears, warnings = TRUE){
   ## seasonal climatology
   climatology <- data_long %>%
     dplyr::filter(., year>=climatologyYears[1], year<=climatologyYears[2]) %>%
-    dplyr::group_by(., variable, region_name, season) %>%
+    dplyr::group_by(., variable, type_name, season) %>%
     dplyr::summarise(., mean=mean(value, na.rm=TRUE), sd=sd(value, na.rm=TRUE)) %>%
     dplyr::ungroup(.)
 
@@ -198,11 +198,11 @@ seasonalAnomaly <- function(data, climatologyYears, warnings = TRUE){
   anomaly <- dplyr::left_join(
     data_long,
     climatology %>%
-      dplyr::select(variable, mean, sd, region_name, season),
-    by = c("variable", "region_name", "season")
+      dplyr::select(variable, mean, sd, type_name, season),
+    by = c("variable", "type_name", "season")
   ) %>%
     dplyr::mutate(., value = (value - mean) / sd) %>%
-    dplyr::select(., region_name, year, season, variable, value)
+    dplyr::select(., type_name, year, season, variable, value)
 
   # TODO fix wide format
   # # convert data to wide format
