@@ -15,7 +15,8 @@ query <- function(search_key, location = 'title'){
   #' @importFrom utils installed.packages
   #' @note Leave search_key blank `''` to return all available datasets
   #' @examples
-  #'
+  #' devtools::install_github("casaultb/azmpdata")
+  #' library(azmpdata)
   #' query(search_key = c('broadscale'), location = 'title')
   #'
   #'
