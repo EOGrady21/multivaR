@@ -20,10 +20,11 @@ or \code{\link{azmpdata::variable_lookup}} (which also searches through datafram
 Leave search_key blank \code{''} to return all available datasets
 }
 \examples{
+\dontrun{
 devtools::install_github("casaultb/azmpdata")
 library(azmpdata)
 query(search_key = c('broadscale'), location = 'title')
-
+}
 
 }
 \concept{search}
