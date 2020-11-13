@@ -13,8 +13,8 @@ query(search_key, location = "title")
 }
 \description{
 Search for matches to search term(s) within azmpdata package data objects. Other search functions that may be useful include
-\code{\link{azmpdata::lookup_variable}} (which allows searching of the detailed variable table - including descriptions of all variables)
-or \code{\link{azmpdata::variable_lookup}} (which also searches through dataframe titles)
+azmpdata::lookup_variable (which allows searching of the detailed variable table - including descriptions of all variables)
+or azmpdata::variable_lookup (which also searches through dataframe titles)
 }
 \note{
 Leave search_key blank \code{''} to return all available datasets
