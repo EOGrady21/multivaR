@@ -3,6 +3,7 @@
 context('Test azmpdata querying')
 
 library(multivaR)
+devtools::install_github("casaultb/azmpdata")
 library(azmpdata)
 
 # NOTE this test may need to be adjusted as more dataframes are added to azmpdata
