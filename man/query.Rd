@@ -9,18 +9,21 @@ query(search_key, location = "title")
 \arguments{
 \item{search_key}{Keyword(s) to search for in azmpdata, if using multiple keywords, provide vector of character strings}
 
-\item{location}{Where to search for keyword(s), options are 'title', or 'metadata'}
+\item{location}{Where to search for keyword(s), options are 'title' (which searches through the titles of data frames), or 'metadata' (which searches through the descriptions of dataframes)}
 }
 \description{
-Search for matches to search term(s) within azmpdata package data objects
+Search for matches to search term(s) within azmpdata package data objects. Other search functions that may be useful include
+\code{\link{azmpdata::lookup_variable}} (which allows searching of the detailed variable table - including descriptions of all variables)
+or \code{\link{azmpdata::variable_lookup}} (which also searches through dataframe titles)
 }
 \note{
 Leave search_key blank \code{''} to return all available datasets
 }
 \examples{
-
+devtools::install_github("casaultb/azmpdata")
+library(azmpdata)
 query(search_key = c('broadscale'), location = 'title')
 
 
-
 }
+\concept{search}
