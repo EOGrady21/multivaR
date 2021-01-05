@@ -25,7 +25,7 @@ devtools::install_github("Echisholm21/multivaR")
 ```
 
 multivaR is designed to work with other packages developed by the Data
-Access team at Bedford Institute of Oceanography (BIO). Specifically,
+Access team at Bedford Institute of Oceanogrpahy (BIO). Specifically,
 this package is designed to work with data which is supplied through the
 `azmpdata` package. This supplementary package can be installed by
 using:
@@ -68,7 +68,7 @@ library(azmpdata)
 #> 
 #>  casaultb/azmpdata status:
 #>  (Package ver: 0.2019.0.9000) Up to date
-#>  (Data ver:2020-10-28) is up to date
+#>  (Data ver: 2021-01-04 ) Push to Github
 query(search_key = '')
 #>  [1] "Derived_Annual_Broadscale"          "Derived_Annual_Sections"           
 #>  [3] "Derived_Annual_Stations"            "Derived_Occupations_Sections"      
@@ -92,7 +92,11 @@ datfr <- right_join(Derived_Occupations_Sections, Zooplankton_Occupations_Sectio
 ```
 
 If anomalies need to be calculated, multivaR has options for calculating
-monthly or annual anomalies with or without normalization.
+monthly, annual or seasonal anomalies with or without normalization.
+Anomaly calculations use a reference period to calculate a climatology
+(`climatologyYears`). This reference period is typically standardized,
+please check that you are using the current standard climatology period
+that is relevant to your data.
 
 ``` r
 # monthly anomalies must be caluclated before annual anomalies (annual anomaly function simply combines monthly anomalies)
@@ -140,13 +144,13 @@ head(anom_1)
 #> 4                     42.676 Spring 99003117_99003102021002
 #> 5                   1077.957 Spring 99003111_99003102020002
 #> 6                    552.340 Spring 99003093_99003102017002
-#>   Calanus_finmarchicus Pseudocalanus copepods non_copepods
-#> 1             1417.526      19845.36 174355.7   175780.000
-#> 2            16743.756      45306.63 256081.0    55155.901
-#> 3            38207.547      29716.98 237735.8    72196.981
-#> 4            22727.273      26223.78 192307.7   164335.664
-#> 5            42459.239      55197.01 362318.8   141621.377
-#> 6            49029.271      23416.97 172700.1     7317.802
+#>   Calanus_finmarchicus_abundance Pseudocalanus_abundance copepods non_copepods
+#> 1                       1417.526                19845.36 174355.7   175780.000
+#> 2                      16743.756                45306.63 256081.0    55155.901
+#> 3                      38207.547                29716.98 237735.8    72196.981
+#> 4                      22727.273                26223.78 192307.7   164335.664
+#> 5                      42459.239                55197.01 362318.8   141621.377
+#> 6                      49029.271                23416.97 172700.1     7317.802
 #>   Arctic_Calanus_species warm_offshore_copepods warm_shelf_copepods
 #> 1               8505.155                  0.000              0.0000
 #> 2              26593.024                  0.000              0.0000
@@ -154,27 +158,27 @@ head(anom_1)
 #> 4               1748.252                  0.000              0.0000
 #> 5              15568.388               1415.308              0.0000
 #> 6                  0.000                  0.000            731.7802
-#>   mesozooplankton_dry_biomass macrozooplankton_dry_biomass
+#>   zooplankton_meso_dry_weight zooplankton_macro_dry_weight
 #> 1                          NA                           NA
 #> 2                          NA                           NA
 #> 3                          NA                           NA
 #> 4                          NA                           NA
 #> 5                          NA                           NA
 #> 6                          NA                           NA
-#>   zooplankton_dry_biomass mesozooplankton_wet_biomass
-#> 1                      NA                          NA
-#> 2                      NA                          NA
-#> 3                      NA                          NA
-#> 4                      NA                    3.606364
-#> 5                      NA                   28.001359
-#> 6                      NA                   11.201718
-#>   macrozooplankton_wet_biomass zooplankton_wet_biomass
-#> 1                   0.09276289                      NA
-#> 2                           NA                      NA
-#> 3                   1.13366038                      NA
-#> 4                           NA                3.604545
-#> 5                   4.51675725               32.518116
-#> 6                           NA               10.857130
+#>   zooplankton_total_dry_weight zooplankton_meso_wet_weight
+#> 1                           NA                          NA
+#> 2                           NA                          NA
+#> 3                           NA                          NA
+#> 4                           NA                    3.606364
+#> 5                           NA                   28.001359
+#> 6                           NA                   11.201718
+#>   zooplankton_macro_wet_weight zooplankton_total_wet_weight
+#> 1                   0.09276289                           NA
+#> 2                           NA                           NA
+#> 3                   1.13366038                           NA
+#> 4                           NA                     3.604545
+#> 5                   4.51675725                    32.518116
+#> 6                           NA                    10.857130
 #>   integrated_chlorophyll_0_100_normalizedAnomaly
 #> 1                                      2.0232446
 #> 2                                      1.2685040
@@ -194,14 +198,14 @@ head(anom_1)
 anom_2 <- calculate_anomaly(data = datfr, anomalyType = 'seasonal', climatologyYears = c(1999, 2010))
 head(anom_2)
 #> # A tibble: 6 x 5
-#>   type_name  year season variable               value
-#>   <chr>     <dbl> <chr>  <chr>                  <dbl>
-#> 1 CSL        1999 Spring Calanus_finmarchicus -1.22  
-#> 2 CSL        1999 Spring Calanus_finmarchicus  0.771 
-#> 3 LL         1999 Spring Calanus_finmarchicus  0.397 
-#> 4 LL         1999 Spring Calanus_finmarchicus -0.0612
-#> 5 LL         1999 Spring Calanus_finmarchicus  0.523 
-#> 6 HL         1999 Spring Calanus_finmarchicus  0.0258
+#>   type_name  year season variable                         value
+#>   <chr>     <dbl> <chr>  <chr>                            <dbl>
+#> 1 CSL        1999 Spring Calanus_finmarchicus_abundance -1.22  
+#> 2 CSL        1999 Spring Calanus_finmarchicus_abundance  0.771 
+#> 3 LL         1999 Spring Calanus_finmarchicus_abundance  0.397 
+#> 4 LL         1999 Spring Calanus_finmarchicus_abundance -0.0612
+#> 5 LL         1999 Spring Calanus_finmarchicus_abundance  0.523 
+#> 6 HL         1999 Spring Calanus_finmarchicus_abundance  0.0258
 ```
 
 Once data is assembled, PCA can be run

@@ -68,7 +68,7 @@ datfr <- right_join(Derived_Occupations_Sections, Zooplankton_Occupations_Sectio
 ```
 
 
-If anomalies need to be calculated, multivaR has options for calculating monthly or annual anomalies with or without normalization.
+If anomalies need to be calculated, multivaR has options for calculating monthly, annual or seasonal anomalies with or without normalization. Anomaly calculations use a reference period to calculate a climatology (`climatologyYears`). This reference period is typically standardized, please check that you are using the current standard climatology period that is relevant to your data. 
 
 ```{r}
 # monthly anomalies must be caluclated before annual anomalies (annual anomaly function simply combines monthly anomalies)
