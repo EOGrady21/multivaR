@@ -103,7 +103,7 @@ calculate_anomaly <- function(data, anomalyType, climatologyYears, var, normaliz
     output <- annualAnomaly(d = d1, anomaly = anomaly_var, warnings = FALSE)
   }
 
-  # not ready yet
+
   if( calc_type == 'seasonal'){
   # seasonal anomaly seasonal climatology
     output <- seasonalAnomaly(data, climatologyYears = climatologyYears, warnings = FALSE)
