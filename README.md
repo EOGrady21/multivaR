@@ -67,19 +67,20 @@ if(!'azmpdata' %in% installed.packages()){devtools::install_github("casaultb/azm
 library(azmpdata)
 #> 
 #>  casaultb/azmpdata status:
-#>  (Package ver: 0.2019.0.9000) Up to date
-#>  (Data ver: 2021-01-04 ) Push to Github
+#>  (Package ver: 0.2019.0.9100) Up to date
+#>  (Data ver:2021-01-14 ) is up to date
 query(search_key = '')
 #>  [1] "Derived_Annual_Broadscale"          "Derived_Annual_Sections"           
-#>  [3] "Derived_Annual_Stations"            "Derived_Occupations_Sections"      
-#>  [5] "Derived_Occupations_Stations"       "Discrete_Annual_Broadscale"        
-#>  [7] "Discrete_Occupations_Sections"      "Discrete_Occupations_Stations"     
-#>  [9] "Phytoplankton_Annual_Stations"      "Phytoplankton_Occupations_Stations"
-#> [11] "RemoteSensing_Annual_Broadscale"    "RemoteSensing_Weekly_Broadscale"   
-#> [13] "Zooplankton_Annual_Sections"        "Zooplankton_Annual_Stations"       
-#> [15] "Zooplankton_Occupations_Broadscale" "Zooplankton_Occupations_Sections"  
-#> [17] "Zooplankton_Occupations_Stations"   "Zooplankton_Seasonal_Broadscale"   
-#> [19] "Zooplankton_Seasonal_Sections"
+#>  [3] "Derived_Annual_Stations"            "Derived_Monthly_Broadscale"        
+#>  [5] "Derived_Monthly_Stations"           "Derived_Occupations_Sections"      
+#>  [7] "Derived_Occupations_Stations"       "Discrete_Annual_Broadscale"        
+#>  [9] "Discrete_Occupations_Sections"      "Discrete_Occupations_Stations"     
+#> [11] "Phytoplankton_Annual_Stations"      "Phytoplankton_Occupations_Stations"
+#> [13] "RemoteSensing_Annual_Broadscale"    "RemoteSensing_Weekly_Broadscale"   
+#> [15] "Zooplankton_Annual_Sections"        "Zooplankton_Annual_Stations"       
+#> [17] "Zooplankton_Occupations_Broadscale" "Zooplankton_Occupations_Sections"  
+#> [19] "Zooplankton_Occupations_Stations"   "Zooplankton_Seasonal_Broadscale"   
+#> [21] "Zooplankton_Seasonal_Sections"
 
 # load in desired data frames
 data("Derived_Occupations_Sections")
@@ -197,15 +198,13 @@ head(anom_1)
 
 anom_2 <- calculate_anomaly(data = datfr, anomalyType = 'seasonal', climatologyYears = c(1999, 2010))
 head(anom_2)
-#> # A tibble: 6 x 5
-#>   type_name  year season variable                         value
-#>   <chr>     <dbl> <chr>  <chr>                            <dbl>
-#> 1 CSL        1999 Spring Calanus_finmarchicus_abundance -1.22  
-#> 2 CSL        1999 Spring Calanus_finmarchicus_abundance  0.771 
-#> 3 LL         1999 Spring Calanus_finmarchicus_abundance  0.397 
-#> 4 LL         1999 Spring Calanus_finmarchicus_abundance -0.0612
-#> 5 LL         1999 Spring Calanus_finmarchicus_abundance  0.523 
-#> 6 HL         1999 Spring Calanus_finmarchicus_abundance  0.0258
+#>   type_name year season                       variable       value
+#> 1       CSL 1999 Spring Calanus_finmarchicus_abundance -1.22078967
+#> 2       CSL 1999 Spring Calanus_finmarchicus_abundance  0.77077700
+#> 3        LL 1999 Spring Calanus_finmarchicus_abundance  0.39701826
+#> 4        LL 1999 Spring Calanus_finmarchicus_abundance -0.06118276
+#> 5        LL 1999 Spring Calanus_finmarchicus_abundance  0.52286420
+#> 6        HL 1999 Spring Calanus_finmarchicus_abundance  0.02582455
 ```
 
 Once data is assembled, PCA can be run
@@ -233,3 +232,6 @@ PCA(datfr[,9:15]) # subset dataframe to exclude metadata columns
 #> integrated_silicate_0_50     -0.38319425 -0.6259318  0.04757690
 #> integrated_silicate_50_150   -0.60520447  0.3621123  0.33927273
 ```
+
+PCA results can be presented, plotted and analyzed as usual, using
+packages outside of `multivaR`.

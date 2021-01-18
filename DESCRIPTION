@@ -2,8 +2,30 @@ Package: multivaR
 Type: Package
 Title: Multivariate Analysis Tools for Maritime DFO
 Version: 0.1.0
-Author: Emily Chisholm
-Maintainer: Emily Chisholm <Emily.Chisholm@dfo-mpo.gc.ca>
+Authors@R: c(
+    person(given = "Emily",
+           family = "Chisholm",
+           role = c("aut", "cre"),
+           email = "Emily.Chisholm@dfo-mpo.gc.ca",
+           comment = c(ORCID = "https://orcid.org/0000-0002-1072-5879")),
+    person(given = "Benoit",
+           family = "Casault",
+           role = c("aut"),
+           email = "Benoit.Casualt@dfo-mpo.gc.ca"),
+    person(given = "Chantelle",
+           family = "Layton",
+           role = c("aut"),
+           email = "Chantelle.Layton@dfo-mpo.gc.ca",
+           comment = c(ORCID = "https://orcid.org/0000-0002-3199-5763")),
+    person(given = "Catherine",
+           family = "Johnson",
+           role = c("ctb"),
+           email = "Catherine.Johnson@dfo-mpo.gc.ca"),
+    person(given = "Mike",
+           family = "MacMahon",
+           role = c("ctb"),
+           email = "Mike.Macmahon@dfo-mpo.gc.ca")
+           )
 Description: Tools to produce multivariate metrics for various analyses, 
     specifically for Silver Hake reporting. Used by AZMP in Maritimes
     region at Fisheries and Oceans Canada.

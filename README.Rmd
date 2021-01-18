@@ -97,4 +97,6 @@ PCA(datfr[,9:15]) # subset dataframe to exclude metadata columns
 
 ```
 
+PCA results can be presented, plotted and analyzed as usual, using packages outside of `multivaR`. 
+
 
