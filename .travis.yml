@@ -3,8 +3,11 @@
 language: r
 addons:
   apt:
-    packages: libmagick++-dev
+    packages:
+       - libmagick++-dev
+       - libgit2-dev
 notifications:
   slack: biozooplanktonlab:lOhK5bfxMxUVKqFFQZIlr8yD
 before_install:
   - sudo $(which R) CMD javareconf
+
