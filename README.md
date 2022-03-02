@@ -21,7 +21,7 @@ You can install the development version from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("Echisholm21/multivaR")
+devtools::install_github("EOGrady21/multivaR")
 ```
 
 multivaR is designed to work with other packages developed by the Data
